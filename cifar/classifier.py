@@ -1,16 +1,18 @@
+import torch.optim as optim
+import numpy as np
+import matplotlib.pyplot as plt
+from pylab import *
+import torch.nn as nn
+from model import *
 import torch
 
 # torchvision # downloads dataset, transforms data
-import torchvision #for data
+import torchvision  # for data
 import torchvision.transforms as transforms
 
 import matplotlib
 matplotlib.use('Agg')
 
-
-from model import *
-import torch.nn as nn
-from pylab import *
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -22,59 +24,41 @@ transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+trainset = torchvision.datasets.CIFAR10(
+    root='./data',
+    train=True,
+    download=True,
+    transform=transform)
 
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size, shuffle=True, num_workers=2)
+trainloader = torch.utils.data.DataLoader(
+    trainset, batch_size=batch_size, shuffle=True, num_workers=2)
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+testset = torchvision.datasets.CIFAR10(
+    root='./data',
+    train=False,
+    download=True,
+    transform=transform)
 
-testloader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(
+    testset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=2)
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-
-
-
-
-import matplotlib.pyplot as plt
-import numpy as np
-
-# functions to show an image
-
-"""
-def imshow(img):
-    img = img / 2 + 0.5     # unnormalize
-    npimg = img.numpy()
-    plt.imshow(np.transpose(npimg, (1, 2, 0)))
-    plt.show()
-
-
-# get some random training images
-dataiter = iter(trainloader)
-images, labels = dataiter.next()
-
-# show images
-imshow(torchvision.utils.make_grid(images))
-# print labels
-print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
-"""
-
-
-
-
-
-#net = Net()
-net = BasicNet()
+net = DoubleCNN()
 net.to(device)
 
 print(net)
 
 
-import torch.optim as optim
-
-criterion = nn.CrossEntropyLoss() # define loss 
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9) # define optimizer 
+criterion = nn.CrossEntropyLoss()  # define loss
+optimizer = optim.SGD(
+    net.parameters(),
+    lr=0.001,
+    momentum=0.9)  # define optimizer
 
 
 for epoch in range(nb_epochs):  # loop over the dataset multiple times
@@ -89,12 +73,12 @@ for epoch in range(nb_epochs):  # loop over the dataset multiple times
         optimizer.step()
 
         running_loss += loss.item()
-        if (i+1) % 100 == 0:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / (batch_size*(i+1))))
+        if (i + 1) % 100 == 0:    # print every 2000 mini-batches
+            print('[%d, %5d] loss: %.3f' %
+                  (epoch + 1, i + 1, running_loss / (batch_size * (i + 1))))
             running_loss = 0.0
 
 print('Finished Training')
-
 
 
 PATH = './cifar_net.pth'
@@ -110,7 +94,7 @@ print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
 
 """
-Evaluation 
+Evaluation
 """
 PATH = './cifar_net.pth'
 
@@ -118,16 +102,21 @@ transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+testset = torchvision.datasets.CIFAR10(
+    root='./data',
+    train=False,
+    download=True,
+    transform=transform)
 
-testloader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(
+    testset, batch_size=4, shuffle=False, num_workers=2)
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 dataiter = iter(testloader)
 images, labels = dataiter.next()
-net = BasicNet()
+net = DoubleCNN()
 net.load_state_dict(torch.load(PATH))
 
 outputs = net(images)
@@ -138,7 +127,7 @@ print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
 
 
 """
-Accuracy 
+Accuracy
 """
 correct = 0
 total = 0

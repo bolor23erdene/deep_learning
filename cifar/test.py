@@ -1,14 +1,14 @@
+from model import Net
 from model import LogisticRegression
 import torch
 
 # torchvision # downloads dataset, transforms data
-import torchvision #for data
+import torchvision  # for data
 import torchvision.transforms as transforms
 
 import matplotlib
 matplotlib.use('Agg')
 
-from model import Net
 
 PATH = './cifar_net.pth'
 
@@ -16,9 +16,14 @@ transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform)
+testset = torchvision.datasets.CIFAR10(
+    root='./data',
+    train=False,
+    download=True,
+    transform=transform)
 
-testloader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(
+    testset, batch_size=4, shuffle=False, num_workers=2)
 
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -26,7 +31,6 @@ classes = ('plane', 'car', 'bird', 'cat',
 
 dataiter = iter(testloader)
 images, labels = dataiter.next()
-
 
 
 # net = Net()
@@ -53,7 +57,6 @@ with torch.no_grad():
 
 print('Accuracy of the network on the 10000 test images: %d %%' % (
     100 * correct / total))
-
 
 
 # class_correct = list(0. for i in range(10))

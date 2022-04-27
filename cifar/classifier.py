@@ -77,8 +77,8 @@ for epoch in range(nb_epochs):  # loop over the dataset multiple times
         running_loss += loss.item()
         
         if (i + 1) % 100 == 0:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / total_count))
+            print('[%d, %5d] loss: %.5f' %
+                  (epoch + 1, i + 1, running_loss/total_count))
 
 print('Finished Training')
 

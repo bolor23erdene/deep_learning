@@ -6,11 +6,11 @@ import torch.optim as optim
 import pandas as pd 
 import torchvision.transforms as transforms
 
-nb_epochs = 1
+nb_epochs = 5
 
-batch_size = 1000
+batch_size = 2000
 
-batch_size = 1000
+batch_size = 2000
 
 trainloader = torch.utils.data.DataLoader(
     torchvision.datasets.MNIST('./data', train=True, download=True,

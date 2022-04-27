@@ -15,7 +15,7 @@ from pylab import *
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-nb_epochs = 1
+nb_epochs = 5
 batch_size = 128
 
 # defining a function called transform

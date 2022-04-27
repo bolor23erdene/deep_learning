@@ -7,9 +7,8 @@ import torchvision.transforms as transforms
 import matplotlib
 matplotlib.use('Agg')
 
-from model import Net
 
-from model import LogisticRegression
+from model import *
 import torch.nn as nn
 from pylab import *
 
@@ -66,7 +65,7 @@ print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
 
 #net = Net()
-net = LogisticRegression()
+net = BasicNet()
 net.to(device)
 
 print(net)
@@ -144,7 +143,7 @@ images, labels = dataiter.next()
 
 
 # net = Net()
-net = LogisticRegression()
+net = BasicNet()
 net.load_state_dict(torch.load(PATH))
 
 outputs = net(images)

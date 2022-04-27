@@ -8,9 +8,9 @@ import torchvision.transforms as transforms
 
 nb_epochs = 1
 
-batch_size = 512
+batch_size = 1000
 
-batch_size = 512
+batch_size = 1000
 
 trainloader = torch.utils.data.DataLoader(
     torchvision.datasets.MNIST('./data', train=True, download=True,

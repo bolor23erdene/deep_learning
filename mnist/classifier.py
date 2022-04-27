@@ -107,7 +107,9 @@ outputs = net(images)
 
 _, predicted = torch.max(outputs, 1)
 
-print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
+print("predicted: ", predicted)
+
+#print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
 
 
 """

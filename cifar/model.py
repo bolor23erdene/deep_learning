@@ -26,8 +26,52 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+    
+class DoubleCnnMaxPool(nn.Module):
+    def __init__(self):
+        super(DoubleCnnMaxPool, self).__init__()
+        self.conv1 = nn.Conv2d(
+            in_channels=3,
+            out_channels=6,
+            kernel_size=5)                      
+        self.pool = nn.MaxPool2d(2, 2)          
+        self.conv2 = nn.Conv2d(
+            in_channels=6,
+            out_channels=16,
+            kernel_size=5)
+        self.fc1 = nn.Linear(24 * 24 * 16, 10)
+        #self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
+    def forward(self, x):
+        x = F.relu(self.conv1(x))#28x28x6
+        x = self.pool(x)#14x14x6
+        x = F.relu(self.conv2(x))#10x10x16
+        x = x.view(-1, 10 * 10 * 16)
+        x = self.fc1(x)
+        return x    
+    
 
+class DoubleCNN(nn.Module):
+    def __init__(self):
+        super(DoubleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(
+            in_channels=3,
+            out_channels=6,
+            kernel_size=5)  
+        self.conv2 = nn.Conv2d(
+            in_channels=6,
+            out_channels=16,
+            kernel_size=5)
+        self.fc1 = nn.Linear(24 * 24 * 16, 10)
+        #self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = x.view(-1, 24 * 24 * 16)
+        x = self.fc1(x)
+        return x
+    
 class DoubleCNN(nn.Module):
     def __init__(self):
         super(DoubleCNN, self).__init__()

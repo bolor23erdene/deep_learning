@@ -48,7 +48,7 @@ testloader = torch.utils.data.DataLoader(
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-net = DoubleCNN()
+net = DoubleCnnMaxPool()
 net.to(device)
 
 print(net)
@@ -116,7 +116,7 @@ classes = ('plane', 'car', 'bird', 'cat',
 
 dataiter = iter(testloader)
 images, labels = dataiter.next()
-net = DoubleCNN()
+net = DoubleCnnMaxPool()
 net.load_state_dict(torch.load(PATH))
 
 outputs = net(images)

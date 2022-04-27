@@ -30,21 +30,14 @@ class BasicNet(nn.Module):
     def __init__(self):
         super(BasicNet, self).__init__()
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=6, kernel_size=5) # 28x28x6
+        self.fc1 = nn.Linear(28*28*6, 10)
         #self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
     def forward(self, x):
         #x = F.relu(self.pool1(self.conv1(x)))
-        x = self.conv1(x)
+        x = F.relu(self.conv1(x))
+        x = self.fc1(x)
         return x
-    
-basic = BasicNet()
-
-
-image = torch.randn(1, 3, 32, 32)
-output = basic(image)
-print(output.shape)
-#inputs = torch.randn(1, 4, 5, 5)
-#F.conv2d(inputs, filters, padding=1)
 
 class LogisticRegression(nn.Module):
 	def __init__(self):
@@ -55,3 +48,12 @@ class LogisticRegression(nn.Module):
 		x = x.view(-1, 32*32*3)
 		return self.fc1(x)
 
+
+
+"""Test"""
+basic = BasicNet()
+
+
+image = torch.randn(1, 3, 32, 32)
+output = basic(image)
+print(output.shape)

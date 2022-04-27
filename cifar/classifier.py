@@ -81,28 +81,16 @@ for epoch in range(nb_epochs):  # loop over the dataset multiple times
 
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
-        # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data[0].to(device), data[1].to(device)
-
-        # zero the parameter gradients
-        # accumulates the gradient for RNN for subsequent backpropagation, but, for CNNs you need to zer the gradients
         optimizer.zero_grad()
-
-        # forward + backward + optimize
         outputs = net(inputs)
         loss = criterion(outputs, labels)
-        
-        # calling backward() multiple times accumulates the gradient for each parameter 
         loss.backward()
-
-        # parameter update based on the current gradient (stored in .grad attributes of parameters)
         optimizer.step()
 
-        # print statistics
         running_loss += loss.item()
         if (i+1) % 100 == 0:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / (batch_size*(i+1))))
+            print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / (batch_size*(i+1))))
             running_loss = 0.0
 
 print('Finished Training')
@@ -122,7 +110,7 @@ print('GroundTruth: ', ' '.join('%5s' % classes[labels[j]] for j in range(4)))
 
 
 """
-Evaluation test: 
+Evaluation 
 """
 PATH = './cifar_net.pth'
 
@@ -137,12 +125,8 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=4, shuffle=False, n
 classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
-
 dataiter = iter(testloader)
 images, labels = dataiter.next()
-
-
-# net = Net()
 net = BasicNet()
 net.load_state_dict(torch.load(PATH))
 
@@ -150,10 +134,12 @@ outputs = net(images)
 
 _, predicted = torch.max(outputs, 1)
 
-print('Predicted: ', ' '.join('%5s' % classes[predicted[j]]
-                              for j in range(4)))
+print('Predicted: ', ' '.join('%5s' % classes[predicted[j]] for j in range(4)))
 
 
+"""
+Accuracy 
+"""
 correct = 0
 total = 0
 with torch.no_grad():

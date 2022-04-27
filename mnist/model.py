@@ -8,7 +8,7 @@ import torch
 class DoubleCnnThreeMlp(nn.Module):
     def __init__(self):
         super(DoubleCnnThreeMlp, self).__init__()
-        self.conv1 = nn.Conv2d(3, 6, 3) # 26
+        self.conv1 = nn.Conv2d(1, 6, 3) # 26
         self.pool = nn.MaxPool2d(2, 2) # 13
         self.conv2 = nn.Conv2d(6, 16, 3) # 11
 
@@ -29,7 +29,7 @@ class DoubleCnnMaxPool(nn.Module):
     def __init__(self):
         super(DoubleCnnMaxPool, self).__init__()
         self.conv1 = nn.Conv2d(
-            in_channels=3,
+            in_channels=1,
             out_channels=6,
             kernel_size=3)                      
         self.pool = nn.MaxPool2d(2, 2)          
@@ -53,7 +53,7 @@ class DoubleCNN(nn.Module):
     def __init__(self):
         super(DoubleCNN, self).__init__()
         self.conv1 = nn.Conv2d(
-            in_channels=3,
+            in_channels=1,
             out_channels=6,
             kernel_size=3)  
         self.conv2 = nn.Conv2d(
@@ -75,7 +75,7 @@ class SingleCNN(nn.Module):
     def __init__(self):
         super(SingleCNN, self).__init__()
         self.conv1 = nn.Conv2d(
-            in_channels=3,
+            in_channels=1,
             out_channels=6,
             kernel_size=5)  # 28x28x6
         self.fc1 = nn.Linear(24 * 24 * 6, 10)
@@ -91,17 +91,17 @@ class SingleCNN(nn.Module):
 class LogisticRegression(nn.Module):
     def __init__(self):
         super(LogisticRegression, self).__init__()
-        self.fc1 = nn.Linear(32 * 32 * 3, 10) 
+        self.fc1 = nn.Linear(28 * 28 * 1, 10) 
 
     def forward(self, x):
-        x = x.view(-1, 32 * 32 * 3)
+        x = x.view(-1, 28 * 28 * 1)
         return self.fc1(x)
 
 
 """Test"""
-basic = SingleCNN()
+# basic = SingleCNN()
 
 
-image = torch.randn(1, 3, 32, 32)
-output = basic(image)
-print(output.shape)
+# image = torch.randn(1, 3, 32, 32)
+# output = basic(image)
+# print(output.shape)

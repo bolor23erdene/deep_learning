@@ -7,7 +7,7 @@ import torch
 # define a CNN model
 
 
-class Net(nn.Module):
+class DoubleCnnThreeMlp(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)

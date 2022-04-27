@@ -62,21 +62,23 @@ optimizer = optim.SGD(
 
 
 for epoch in range(nb_epochs):  # loop over the dataset multiple times
-
+    total_count = 0
     running_loss = 0.0
     for i, data in enumerate(trainloader, 0):
         inputs, labels = data[0].to(device), data[1].to(device)
         optimizer.zero_grad()
         outputs = net(inputs)
         loss = criterion(outputs, labels)
+        
         loss.backward()
         optimizer.step()
-
+        
+        total_count += batch_size
         running_loss += loss.item()
+        
         if (i + 1) % 100 == 0:    # print every 2000 mini-batches
             print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / (batch_size * (i + 1))))
-            running_loss = 0.0
+                  (epoch + 1, i + 1, running_loss / total_count))
 
 print('Finished Training')
 

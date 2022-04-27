@@ -39,7 +39,7 @@ class DoubleCnnMaxPool(nn.Module):
             in_channels=6,
             out_channels=16,
             kernel_size=5)
-        self.fc1 = nn.Linear(24 * 24 * 16, 10)
+        self.fc1 = nn.Linear(10 * 10 * 16, 10)
         #self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
 
     def forward(self, x):

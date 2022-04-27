@@ -79,7 +79,7 @@ class LogisticRegression(nn.Module):
 
 
 """Test"""
-basic = BasicNet()
+basic = SingleCNN()
 
 
 image = torch.randn(1, 3, 32, 32)

@@ -36,6 +36,7 @@ class BasicNet(nn.Module):
     def forward(self, x):
         #x = F.relu(self.pool1(self.conv1(x)))
         x = F.relu(self.conv1(x))
+        x = x.view(-1, 28*28*6)
         x = self.fc1(x)
         return x
 

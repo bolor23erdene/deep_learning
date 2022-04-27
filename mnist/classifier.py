@@ -6,11 +6,11 @@ import torch.optim as optim
 import pandas as pd 
 import torchvision.transforms as transforms
 
-nb_epochs = 10
+nb_epochs = 1
 
-batch_size = 256
+batch_size = 512
 
-batch_size = 256
+batch_size = 512
 
 trainloader = torch.utils.data.DataLoader(
     torchvision.datasets.MNIST('./data', train=True, download=True,
@@ -59,7 +59,7 @@ for r in range(nb_epochs):
         total_cnt += batch_size
 
         total_loss += loss.item()
-        if i % 10 == 0:
+        if i % 5 == 0:
             print("Loss: ", total_loss/total_cnt)
             print(images.shape)
             
@@ -83,20 +83,18 @@ images, labels = dataiter.next()
 """
 Evaluation
 """
-PATH = './mnist_net.pth'
+# transform = transforms.Compose(
+#     [transforms.ToTensor(),
+#      transforms.Normalize((0.1307,), (0.3081,))])
 
-transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.1307,), (0.3081,))])
+# testset = torchvision.datasets.CIFAR10(
+#     root='./data',
+#     train=False,
+#     download=True,
+#     transform=transform)
 
-testset = torchvision.datasets.CIFAR10(
-    root='./data',
-    train=False,
-    download=True,
-    transform=transform)
-
-testloader = torch.utils.data.DataLoader(
-    testset, batch_size=4, shuffle=False, num_workers=2)
+# testloader = torch.utils.data.DataLoader(
+#     testset, batch_size=4, shuffle=False, num_workers=2)
 
 classes = ('0', '1')
 

@@ -2,45 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-
-torch.manual_seed(1)
-
-""" 
-LSTM dimensions:
-
-The first axis is the sequence itself.
-The second indexes instances in the mini-batch.
-The third indexes elements of the input. 
-"""
-
-class LSTMTagger(nn.Module):
-    
-    def __init__(self, embedding_dim, hidden_dim, vocab_size, num_classes):
-        super(LSTMTagger, self).__init__()
-        self.hidden_dim = hidden_dim
-
-        self.word_embeddings = nn.Embedding(vocab_size, embedding_dim)
-
-        # The LSTM takes word embeddings as inputs, and outputs hidden states
-        # with dimensionality hidden_dim.
-        self.lstm = nn.LSTM(embedding_dim, hidden_dim)
-
-        # The linear layer that maps from hidden state space to tag space
-        self.hidden2tag = nn.Linear(hidden_dim, num_classes)
-
-    def forward(self, sentence):
-        embeds = self.word_embeddings(sentence)
-        lstm_out, _ = self.lstm(embeds.view(len(sentence), 1, -1)) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
-        tag_space = self.hidden2tag(lstm_out.view(len(sentence), -1)) #in: 5x10 hidden: 10x3 out: 5x3
-        tag_scores = F.log_softmax(tag_space, dim=1) #in 5x3 #out 5x3
-        
-        print("embeds: ", embeds.shape)
-        print("lstm_out: ", lstm_out.shape)
-        print("tag_space: ", tag_space.shape)
-        print("tag_scores: ", tag_scores.shape)
-        
-        return tag_scores
-    
 import numpy as np
 import torch
 import torch.nn as nn
@@ -52,12 +13,11 @@ from torchtext.datasets import AG_NEWS
 from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torch.utils.data import DataLoader
-from torch import nn
+
+from model import LSTM
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
 train_iter = iter(AG_NEWS(split='train'))
-
 tokenizer = get_tokenizer('basic_english')
 train_iter = AG_NEWS(split='train')
 
@@ -67,10 +27,7 @@ def yield_tokens(data_iter):
 
 vocab = build_vocab_from_iterator(yield_tokens(train_iter), specials=["<unk>"])
 vocab.set_default_index(vocab["<unk>"])
-
 vocab(['here', 'is', 'an', 'example'])
-
-
 text_pipeline = lambda x: vocab(tokenizer(x))
 label_pipeline = lambda x: int(x) - 1
 
@@ -92,14 +49,19 @@ dataloader = DataLoader(train_iter, batch_size=8, shuffle=False, collate_fn=coll
 train_iter = AG_NEWS(split='train')
 num_class = len(set([label for (label, text) in train_iter]))
 vocab_size = len(vocab)
-emsize = 100
-hidden_dim = 100
+emsize = 128
+hidden_dim = 64
+output_dim = 50
 
 print("num_class: ", num_class)
 print("vocab_size: ", vocab_size)
 
 #def __init__(self, embedding_dim, hidden_dim, vocab_size, num_classes):
-model = LSTMTagger(emsize, hidden_dim, vocab_size, num_class).to(device)
+#vocab_size, embedding_dim, hidden_dim, output_dim, n_layers, bidirectional, dropout_rate, pad_index
+unk_index = vocab['<unk>']
+pad_index = vocab['<pad>']
+
+model = LSTM(vocab_size, emsize, hidden_dim, output_dim, n_layers=2, bidirectional=False, dropout_rate=0.2, pad_index=pad_index).to(device)
 
 import time
 
@@ -129,17 +91,6 @@ def train(dataloader):
             total_acc, total_count = 0, 0
             start_time = time.time()
 
-# def evaluate(dataloader):
-#     model.eval()
-#     total_acc, total_count = 0, 0
-
-#     with torch.no_grad():
-#         for idx, (label, text, offsets) in enumerate(dataloader):
-#             predicted_label = model(text)
-#             loss = criterion(predicted_label, label)
-#             total_acc += (predicted_label.argmax(1) == label).sum().item()
-#             total_count += label.size(0)
-#     return total_acc/total_count
 
 from torch.utils.data.dataset import random_split
 from torchtext.data.functional import to_map_style_dataset
@@ -169,47 +120,5 @@ test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE,
 for epoch in range(1, EPOCHS + 1):
     epoch_start_time = time.time()
     train(train_dataloader)
-    #accu_val = evaluate(valid_dataloader)
-    # if total_accu is not None and total_accu > accu_val:
-    #   scheduler.step()
-    # else:
-    #    total_accu = accu_val
-    # print('-' * 59)
-    # print('| end of epoch {:3d} | time: {:5.2f}s | '
-    #       'valid accuracy {:8.3f} '.format(epoch,
-    #                                        time.time() - epoch_start_time,
-    #                                        accu_val))
     print('-' * 59)
     
-    
-# print('Checking the results of test dataset.')
-# accu_test = evaluate(test_dataloader)
-# print('test accuracy {:8.3f}'.format(accu_test))
-
-
-# ag_news_label = {1: "World",
-#                  2: "Sports",
-#                  3: "Business",
-#                  4: "Sci/Tec"}
-
-# def predict(text, text_pipeline):
-#     with torch.no_grad():
-#         text = torch.tensor(text_pipeline(text))
-#         output = model(text, torch.tensor([0]))
-#         return output.argmax(1).item() + 1
-
-# ex_text_str = "MEMPHIS, Tenn. – Four days ago, Jon Rahm was \
-#     enduring the season’s worst weather conditions on Sunday at The \
-#     Open on his way to a closing 75 at Royal Portrush, which \
-#     considering the wind and the rain was a respectable showing. \
-#     Thursday’s first round at the WGC-FedEx St. Jude Invitational \
-#     was another story. With temperatures in the mid-80s and hardly any \
-#     wind, the Spaniard was 13 strokes better in a flawless round. \
-#     Thanks to his best putting performance on the PGA Tour, Rahm \
-#     finished with an 8-under 62 for a three-stroke lead, which \
-#     was even more impressive considering he’d never played the \
-#     front nine at TPC Southwind."
-
-# model = model.to("cpu")
-
-# print("This is a %s news" %ag_news_label[predict(ex_text_str, text_pipeline)])

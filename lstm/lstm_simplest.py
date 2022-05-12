@@ -88,31 +88,12 @@ def collate_batch(batch):
 
 train_iter = AG_NEWS(split='train')
 dataloader = DataLoader(train_iter, batch_size=8, shuffle=False, collate_fn=collate_batch)
-
-
-# class TextClassificationModel(nn.Module):
-
-#     def __init__(self, vocab_size, embed_dim, num_class):
-#         super(TextClassificationModel, self).__init__()
-#         self.embedding = nn.EmbeddingBag(vocab_size, embed_dim, sparse=True)
-#         self.fc = nn.Linear(embed_dim, num_class)
-#         self.init_weights()
-
-#     def init_weights(self):
-#         initrange = 0.5
-#         self.embedding.weight.data.uniform_(-initrange, initrange)
-#         self.fc.weight.data.uniform_(-initrange, initrange)
-#         self.fc.bias.data.zero_()
-
-#     def forward(self, text, offsets):
-#         embedded = self.embedding(text, offsets)
-#         return self.fc(embedded)
     
 train_iter = AG_NEWS(split='train')
 num_class = len(set([label for (label, text) in train_iter]))
 vocab_size = len(vocab)
-emsize = 64
-hidden_dim = 64
+emsize = 100
+hidden_dim = 100
 
 print("num_class: ", num_class)
 print("vocab_size: ", vocab_size)

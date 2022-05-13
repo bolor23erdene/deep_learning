@@ -77,9 +77,9 @@ def train(dataloader):
     start_time = time.time()
 
     for idx, (label, text, offsets) in enumerate(dataloader):
-        print('label: ', label.shape)
-        print('text: ', text.shape)
-        print('offset ', offsets.shape)
+        # print('label: ', label.shape)
+        # print('text: ', text.shape)
+        # print('offset ', offsets.shape)
         
         optimizer.zero_grad()
         

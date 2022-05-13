@@ -32,7 +32,7 @@ text_pipeline = lambda x: vocab(tokenizer(x))
 label_pipeline = lambda x: int(x) - 1
 
 def collate_batch(batch):
-    label_list, text_list, offsets = [], [], [0]
+    label_list, text_list, offsets = [], [], []
     for (_label, _text) in batch:
          label_list.append(label_pipeline(_label))
          processed_text = torch.tensor(text_pipeline(_text), dtype=torch.int64)
@@ -80,7 +80,7 @@ def train(dataloader):
         
         optimizer.zero_grad()
         
-        predicted_label = model(text, len(offsets))
+        predicted_label = model(text, offsets)
         
         loss = criterion(predicted_label, label)
         

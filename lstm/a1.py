@@ -39,6 +39,7 @@ def collate_batch(batch):
          text_list.append(processed_text)
          offsets.append(processed_text.size(0))
     label_list = torch.tensor(label_list, dtype=torch.int64)
+    offsets = torch.tensor(offsets, dtype=torch.int64)
     #offsets = torch.tensor(offsets[:-1]).cumsum(dim=0)
     
     text_list = torch.cat(text_list)

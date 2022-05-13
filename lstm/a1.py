@@ -76,6 +76,7 @@ def train(dataloader):
         print('label: ', label.shape)
         print('text: ', text.shape)
         print('offset ', offsets.shape)
+        
         optimizer.zero_grad()
         
         predicted_label = model(text, len(offsets))

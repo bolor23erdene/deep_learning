@@ -28,7 +28,7 @@ class LSTM(nn.Module):
         # length = [batch size]
         embedded = self.dropout(self.embedding(ids))
         # embedded = [batch size, seq len, embedding dim]
-        packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, length, batch_first=True, 
+        packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, lengths=length.cpu(), batch_first=True, 
                                                             enforce_sorted=False)
         
         packed_output, (hidden, cell) = self.lstm(packed_embedded)

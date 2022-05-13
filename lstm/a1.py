@@ -39,7 +39,8 @@ def collate_batch(batch):
          text_list.append(processed_text)
          offsets.append(processed_text.size(0))
     label_list = torch.tensor(label_list, dtype=torch.int64)
-    offsets = torch.tensor(offsets[:-1]).cumsum(dim=0)
+    #offsets = torch.tensor(offsets[:-1]).cumsum(dim=0)
+    
     text_list = torch.cat(text_list)
     return label_list.to(device), text_list.to(device), offsets.to(device)
 
@@ -72,9 +73,9 @@ def train(dataloader):
     start_time = time.time()
 
     for idx, (label, text, offsets) in enumerate(dataloader):
-        print('label: ', label)
-        print('text: ', text )
-        print('offset ', offsets)
+        print('label: ', label.shape)
+        print('text: ', text.shape)
+        print('offset ', offsets.shape)
         optimizer.zero_grad()
         
         predicted_label = model(text, len(offsets))

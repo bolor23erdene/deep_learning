@@ -31,6 +31,7 @@ vocab(['here', 'is', 'an', 'example'])
 text_pipeline = lambda x: vocab(tokenizer(x))
 label_pipeline = lambda x: int(x) - 1
 
+from torch.nn.utils.rnn import pad_sequence
 def collate_batch(batch):
     label_list, text_list, offsets = [], [], []
     for (_label, _text) in batch:
@@ -43,7 +44,8 @@ def collate_batch(batch):
     #text_list = torch.tensor(text_list, dtype=torch.int64)
     #offsets = torch.tensor(offsets[:-1]).cumsum(dim=0)
     
-    text_list = torch.cat(text_list, axis=0)
+    # text_list = torch.cat(text_list, axis=0)
+    text_list = pad_sequence(text_list, batch_first=True, padding_value=0)
     return label_list.to(device), text_list.to(device), offsets.to(device)
 
 train_iter = AG_NEWS(split='train')

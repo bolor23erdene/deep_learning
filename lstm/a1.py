@@ -72,9 +72,12 @@ def train(dataloader):
     start_time = time.time()
 
     for idx, (label, text, offsets) in enumerate(dataloader):
+        print('label: ', label)
+        print('text: ', text )
+        print('offset ', offsets)
         optimizer.zero_grad()
         
-        predicted_label = model(text)
+        predicted_label = model(text, len(offsets))
         
         loss = criterion(predicted_label, label)
         

@@ -30,6 +30,7 @@ class LSTM(nn.Module):
         # embedded = [batch size, seq len, embedding dim]
         packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, length, batch_first=True, 
                                                             enforce_sorted=False)
+        
         packed_output, (hidden, cell) = self.lstm(packed_embedded)
         # hidden = [n layers * n directions, batch size, hidden dim]
         # cell = [n layers * n directions, batch size, hidden dim]

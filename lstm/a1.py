@@ -56,7 +56,7 @@ train_iter = AG_NEWS(split='train')
 num_class = len(set([label for (label, text) in train_iter]))
 vocab_size = len(vocab)
 emsize = 128
-hidden_dim = 64
+hidden_dim = 32
 output_dim = 50
 
 print("num_class: ", num_class)

@@ -59,35 +59,15 @@ class LSTM(nn.Module):
     #     return prediction
     
     
-    """
-    https://linuxpip.org/pytorch-squeeze-unsqueeze/
-    Simply put, torch.unsqueeze "adds" a superficial 1 dimension to tensor (at the specified dimension), 
-    while torch.squeeze removes all superficial 1 dimensions from tensor.
-    Below is a visual representation of what squeeze/unsqueeze do for an 2D matrix.
-    """
-    def attention(self, lstm_output, final_state):
-        lstm_output = lstm_output.permute(1, 0, 2) # (batch, seq_len, hid)-> (seq_len, batch, hid)
-        
-        # final_state= (1,batch,hidden)
-        merged_state = torch.cat([s for s in final_state], 1) # (seq_len, hid)
-        
-        # squeeze=Returns a tensor with all the dimensions of input of size 1 removed.
-        # merged_state.squeeze(0) -> (batch,hidden)
-        # merged_state.squeeze(0).unsqueeze(2) -> (batch,hidden,1)
-        merged_state = merged_state.squeeze(0).unsqueeze(2) 
-        weights = torch.bmm(lstm_output, merged_state) # batch, seq_len, hidden x batch, hidden, 1 
-        weights = F.softmax(weights.squeeze(2), dim=1).unsqueeze(2) # batch x seq_len
-        return torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2)
-    
     def forward(self, sentence):
         embeds = self.word_embeddings(sentence)
         lstm_out, (hidden, cell) = self.lstm(embeds.view(len(sentence), 1, -1)) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
-        att_output = self.attention(lstm_out, hidden)
-        pred = self.hidden2tag(att_output.squeeze(0))
+        #att_output = self.attention(lstm_out, hidden)
+        pred = self.hidden2tag(hidden)
         
         print("embeds: ", embeds.shape)
         print("lstm_out: ", lstm_out.shape)
-        print("tag_space: ", att_output.shape)
+        print("tag_space: ", hidden.shape)
         print("tag_scores: ", pred.shape)
         
         return pred
@@ -114,7 +94,7 @@ class LSTM_ATTN(nn.Module):
         #lstm_output = lstm_output.permute(1, 0, 2) # (batch, seq_len, hid)-> (seq_len, batch, hid)
         
         # final_state= (1,batch,hidden)
-        merged_state = torch.cat([s for s in final_state], 1) # (seq_len, hid)
+        #merged_state = torch.cat([s for s in final_state], 1) # (seq_len, hid)
         
         # squeeze=Returns a tensor with all the dimensions of input of size 1 removed.
         # merged_state.squeeze(0) -> (batch,hidden)
@@ -127,12 +107,12 @@ class LSTM_ATTN(nn.Module):
     def forward(self, ids, length):
         # ids = [batch size, seq len]
         # length = [batch size]
-        embedded = self.dropout(self.embedding(ids))
+        embedded = self.embedding(ids)
         # embedded = [batch size, seq len, embedding dim]
-        packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, lengths=length.cpu(), batch_first=True, 
-                                                            enforce_sorted=False)
+        #packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, lengths=length.cpu(), batch_first=True, 
+                                                           # enforce_sorted=False)
         
-        packed_output, (hidden, cell) = self.lstm(packed_embedded) ## n_layer x batch_size x hidden_dim
+        output, (hidden, cell) = self.lstm(embedded) ## n_layer x batch_size x hidden_dim
         # hidden = [n layers * n directions, batch size, hidden dim]
         # cell = [n layers * n directions, batch size, hidden dim]
         #output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output) ## output = [batch size, seq len, hidden dim * n directions]
@@ -153,7 +133,7 @@ class LSTM_ATTN(nn.Module):
         #prediction = self.fc(context)
         # prediction = [batch size, output dim]
         
-        att_output = self.attention(packed_output, hidden)
+        att_output = self.attention(output, hidden)
         pred = self.hidden2tag(att_output.squeeze(0))
         
         

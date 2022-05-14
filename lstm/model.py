@@ -135,7 +135,7 @@ class LSTM_ATTN(nn.Module):
         packed_output, (hidden, cell) = self.lstm(packed_embedded) ## n_layer x batch_size x hidden_dim
         # hidden = [n layers * n directions, batch size, hidden dim]
         # cell = [n layers * n directions, batch size, hidden dim]
-        output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output) ## output = [batch size, seq len, hidden dim * n directions]
+        #output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output) ## output = [batch size, seq len, hidden dim * n directions]
         
         # x = self.fc1(output) #batch, seq_len, hid_dim
         # x = self.tanh(x)
@@ -143,11 +143,11 @@ class LSTM_ATTN(nn.Module):
         #context = torch.matmul(output, alpha)
         
         #context = torch.matmul(output, x) # batch, seq_len, hid_dim - batch, seq_len, 1
-        if self.lstm.bidirectional:
-            hidden = self.dropout(torch.cat([hidden[-1], hidden[-2]], dim=-1))
-            # hidden = [batch size, hidden dim * 2]
-        else:
-            hidden = self.dropout(hidden[-1])
+        # if self.lstm.bidirectional:
+        #     hidden = self.dropout(torch.cat([hidden[-1], hidden[-2]], dim=-1))
+        #     # hidden = [batch size, hidden dim * 2]
+        # else:
+        #     hidden = self.dropout(hidden[-1])
             #hidden = [batch size, hidden dim]
         #prediction = self.fc(hidden)
         #prediction = self.fc(context)

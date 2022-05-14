@@ -91,15 +91,16 @@ class LSTM_ATTN(nn.Module):
     def attention(self, lstm_output, final_state):
         print("lstm_output: ", lstm_output.shape)
         print("final_state: ", final_state.shape)
-        lstm_output = lstm_output.permute(1, 0, 2) # (batch, seq_len, hid)-> (seq_len, batch, hid)
+        #lstm_output = lstm_output.permute(1, 0, 2) # (batch, seq_len, hid)-> (seq_len, batch, hid)
         
         # final_state= (1,batch,hidden)
-        merged_state = torch.cat([s for s in final_state], 1) # (seq_len, hid)
+        #merged_state = torch.cat([s for s in final_state], 1) # (seq_len, hid)
         
         # squeeze=Returns a tensor with all the dimensions of input of size 1 removed.
         # merged_state.squeeze(0) -> (batch,hidden)
         # merged_state.squeeze(0).unsqueeze(2) -> (batch,hidden,1)
-        merged_state = merged_state.squeeze(0).unsqueeze(2) 
+        #merged_state = merged_state.squeeze(0).unsqueeze(2) 
+        final_state = final_state.permute(1, 2, 0)
         weights = torch.bmm(lstm_output, final_state) # batch, seq_len, hidden x batch, hidden, 1 
         weights = F.softmax(weights.squeeze(2), dim=1).unsqueeze(2) # batch x seq_len
         return torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2)

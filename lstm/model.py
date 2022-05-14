@@ -89,8 +89,8 @@ class LSTM_ATTN(nn.Module):
     Below is a visual representation of what squeeze/unsqueeze do for an 2D matrix.
     """
     def attention(self, lstm_output, final_state):
-        print("lstm_output: ", len(lstm_output))
-        print("final_state: ", len(final_state))
+        print("lstm_output: ", lstm_output.shape)
+        print("final_state: ", final_state.shape)
         #lstm_output = lstm_output.permute(1, 0, 2) # (batch, seq_len, hid)-> (seq_len, batch, hid)
         
         # final_state= (1,batch,hidden)

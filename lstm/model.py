@@ -141,6 +141,7 @@ class LSTM_ATTN(nn.Module):
         
         att_output = self.attention(output, hidden)
         pred = self.fc(att_output.squeeze(0))
+        print(att_output.shape, att_output.squeeze(0).shape)
         
         
         return pred#prediction

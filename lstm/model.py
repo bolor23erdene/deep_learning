@@ -23,6 +23,9 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
         self.dropout = nn.Dropout(dropout_rate)
         
+        self.alpha = nn.Softmax(nn.Tanh(nn.Linear(hidden_dim, 1)))
+        #self.tanh = nn.Tanh()
+        
     def forward(self, ids, length):
         # ids = [batch size, seq len]
         # length = [batch size]
@@ -31,18 +34,23 @@ class LSTM(nn.Module):
         packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, lengths=length.cpu(), batch_first=True, 
                                                             enforce_sorted=False)
         
-        packed_output, (hidden, cell) = self.lstm(packed_embedded)
+        packed_output, (hidden, cell) = self.lstm(packed_embedded) ## n_layer x batch_size x hidden_dim
         # hidden = [n layers * n directions, batch size, hidden dim]
         # cell = [n layers * n directions, batch size, hidden dim]
-        output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output)
-        # output = [batch size, seq len, hidden dim * n directions]
-        if self.lstm.bidirectional:
-            hidden = self.dropout(torch.cat([hidden[-1], hidden[-2]], dim=-1))
-            # hidden = [batch size, hidden dim * 2]
-        else:
-            hidden = self.dropout(hidden[-1])
+        output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output) ## output = [batch size, seq len, hidden dim * n directions]
+        
+        alpha = self.alpha(output)
+        #context = torch.matmul(output, alpha)
+        
+        context = torch.matmul(output, alpha)
+        # if self.lstm.bidirectional:
+        #     hidden = self.dropout(torch.cat([hidden[-1], hidden[-2]], dim=-1))
+        #     # hidden = [batch size, hidden dim * 2]
+        # else:
+        # hidden = self.dropout(hidden[-1])
             # hidden = [batch size, hidden dim]
-        prediction = self.fc(hidden)
+        #prediction = self.fc(hidden)
+        prediction = self.fc(context)
         # prediction = [batch size, output dim]
         return prediction
     

@@ -135,7 +135,7 @@ class LSTM_ATTN(nn.Module):
         # prediction = [batch size, output dim]
         
         att_output = self.attention(output, hidden)
-        pred = self.hidden2tag(att_output.squeeze(0))
+        pred = self.fc(att_output.squeeze(0))
         
         
         return pred#prediction

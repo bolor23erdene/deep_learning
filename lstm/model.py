@@ -89,8 +89,8 @@ class LSTM_ATTN(nn.Module):
     Below is a visual representation of what squeeze/unsqueeze do for an 2D matrix.
     """
     def attention(self, lstm_output, final_state):
-        #print("lstm_output: ", lstm_output.shape)
-        #print("final_state: ", final_state.shape)
+        print("lstm_output: ", lstm_output.shape)
+        print("final_state: ", final_state.shape)
         #lstm_output = lstm_output.permute(1, 0, 2) # (batch, seq_len, hid)-> (seq_len, batch, hid)
         
         # final_state= (1,batch,hidden)
@@ -101,9 +101,14 @@ class LSTM_ATTN(nn.Module):
         # merged_state.squeeze(0).unsqueeze(2) -> (batch,hidden,1)
         #merged_state = merged_state.squeeze(0).unsqueeze(2) 
         final_state = final_state.permute(1, 2, 0)
+        print("modified final_state: ", final_state.shape)
         weights = torch.bmm(lstm_output, final_state) # batch, seq_len, hidden x batch, hidden, 1 
+        print("weights bmm(lstm_out, hidden): ", weights.shape)   
         weights = F.softmax(weights.squeeze(2), dim=1).unsqueeze(2) # batch x seq_len
-        return torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2)
+        print("F.softmax(weights.squeeze(2), dim=1).unsqueeze(2): ", weights.shape) 
+        att_output = torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2)
+        print("torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2): ", att_output.shape)   
+        return att_output
     
     def forward(self, ids, length):
         # ids = [batch size, seq len]

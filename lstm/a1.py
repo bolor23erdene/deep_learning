@@ -108,7 +108,7 @@ from torchtext.data.functional import to_map_style_dataset
 # Hyperparameters
 EPOCHS = 10 # epoch
 LR = 5  # learning rate
-BATCH_SIZE = 64 # batch size for training
+BATCH_SIZE = 1024 # batch size for training
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=LR)

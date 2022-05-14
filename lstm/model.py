@@ -23,7 +23,9 @@ class LSTM(nn.Module):
         self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
         self.dropout = nn.Dropout(dropout_rate)
         
-        self.alpha = nn.Softmax(nn.Tanh(nn.Linear(hidden_dim, 1)))
+        self.fc1 = nn.Linear(hidden_dim, 1)
+        self.tanh = nn.Tanh(self.fc1)
+        self.soft = nn.Softmax(self.tanh)
         #self.tanh = nn.Tanh()
         
     def forward(self, ids, length):
@@ -39,10 +41,12 @@ class LSTM(nn.Module):
         # cell = [n layers * n directions, batch size, hidden dim]
         output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output) ## output = [batch size, seq len, hidden dim * n directions]
         
-        alpha = self.alpha(output)
+        x = self.fc1(output) #batch, seq_len, hid_dim
+        x = self.tanh(x)
+        x = self.soft(x)
         #context = torch.matmul(output, alpha)
         
-        context = torch.matmul(output, alpha)
+        context = torch.matmul(output, x) # batch, seq_len, hid_dim - batch, seq_len, 1
         # if self.lstm.bidirectional:
         #     hidden = self.dropout(torch.cat([hidden[-1], hidden[-2]], dim=-1))
         #     # hidden = [batch size, hidden dim * 2]

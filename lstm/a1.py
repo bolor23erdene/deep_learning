@@ -14,7 +14,7 @@ from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torch.utils.data import DataLoader
 
-from model import LSTM
+from model import LSTM, LSTM_ATTN
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 train_iter = iter(AG_NEWS(split='train'))
@@ -67,7 +67,7 @@ print("vocab_size: ", vocab_size)
 unk_index = vocab['<unk>']
 pad_index = vocab['<pad>']
 
-model = LSTM(vocab_size, emsize, hidden_dim, output_dim, n_layers=1, bidirectional=False, dropout_rate=0.2, pad_index=pad_index).to(device)
+model = LSTM_ATTN(vocab_size, emsize, hidden_dim, output_dim, n_layers=1, bidirectional=False, dropout_rate=0.2, pad_index=pad_index).to(device)
 
 import time
 

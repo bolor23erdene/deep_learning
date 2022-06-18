@@ -13,7 +13,8 @@ from pprint import pprint
 from torch.utils.tensorboard import SummaryWriter
 
 # data preparation german language
-
+spacy_german = spacy.load("de")
+spacy_english = spacy.load("en")
 
 # text cleaning preprocessing
 

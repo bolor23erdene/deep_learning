@@ -90,8 +90,9 @@ import torch.nn.functional as F
 from torch import Tensor
 
 
-print(next(train_iter))
-
+#print(next(train_iter))
+for _, (src, trg) in enumerate(train_iter):
+    print(src,trg)
 
 
 # text cleaning preprocessing

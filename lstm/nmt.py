@@ -1,7 +1,16 @@
 
-from torchtext.datasets import IWSLT2017
-train_iter, valid_iter, test_iter = IWSLT2017()
-src_sentence, tgt_sentence = next(iter(train_iter))
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchtext.datasets import Multi30k
+from torchtext.data import Field, BucketIterator
+import numpy as np
+import pandas as pd
+import spacy
+import random
+from torchtext.data.metrics import bleu_score
+from pprint import pprint
+from torch.utils.tensorboard import SummaryWriter
 
 # data preparation german language
 

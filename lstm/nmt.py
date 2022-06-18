@@ -81,7 +81,13 @@ valid_iter = DataLoader(val_data, batch_size=BATCH_SIZE,
 test_iter = DataLoader(test_data, batch_size=BATCH_SIZE,
                        shuffle=True, collate_fn=generate_batch)
 
+import random
+from typing import Tuple
 
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch import Tensor
 
 # text cleaning preprocessing
 

@@ -90,6 +90,9 @@ import torch.nn.functional as F
 from torch import Tensor
 
 
+print(next(train_iter))
+
+
 
 # text cleaning preprocessing
 

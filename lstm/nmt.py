@@ -13,8 +13,14 @@ from pprint import pprint
 from torch.utils.tensorboard import SummaryWriter
 
 # data preparation german language
-spacy_german = spacy.load("de")
-spacy_english = spacy.load("en")
+
+
+"""SPACY: open source NLP library.
+1. download the english and german language
+2. create tokenizer 
+"""
+spacy_german = spacy.load("de_core_news_sm")
+spacy_english = spacy.load("en_core_news_sm")
 
 def tokenize_german(text):
     return [token.text for token in spacy_german.tokenizer(text)]

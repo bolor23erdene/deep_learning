@@ -20,7 +20,7 @@ val_filepaths = [extract_archive(download_from_url(url_base + url))[0] for url i
 test_filepaths = [extract_archive(download_from_url(url_base + url))[0] for url in test_urls]
 
 de_tokenizer = get_tokenizer('spacy', language='de_core_news_sm')
-en_tokenizer = get_tokenizer('spacy', language='en')
+en_tokenizer = get_tokenizer('spacy', language='en_core_news_sm')
 
 def build_vocab(filepath, tokenizer):
   counter = Counter()

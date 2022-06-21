@@ -94,7 +94,7 @@ def train(dataloader):
         
         total_acc += (predicted_label.argmax(1) == label).sum().item()
         total_count += label.size(0)
-        if idx % log_interval == 0 and idx > 0:
+        if idx % log_interval == 0:
             elapsed = time.time() - start_time
             print('| epoch {:3d} | {:5d}/{:5d} batches '
                   '| accuracy {:8.3f}'.format(epoch, idx, len(dataloader),

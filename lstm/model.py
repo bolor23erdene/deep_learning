@@ -60,16 +60,15 @@ class LSTM(nn.Module):
     
     
     def forward(self, ids):
-        embedded = self.embeddings(ids)
+        embedded = self.embedding(ids)
+        print("embeds: ", embedded.shape)
         lstm_out, (hidden, cell) = self.lstm(embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
+        print("lstm_out: ", lstm_out.shape)
         #att_output = self.attention(lstm_out, hidden)
         pred = self.fc(lstm_out)
+        print("pred: ", pred.shape)
         
-        print("embeds: ", embedded.shape)
-        print("lstm_out: ", lstm_out.shape)
-        print("tag_space: ", hidden.shape)
-        print("tag_scores: ", pred.shape)
-        
+
         return pred
     
 class LSTM_ATTN(nn.Module):

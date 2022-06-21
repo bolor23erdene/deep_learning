@@ -85,7 +85,7 @@ model = LSTM(
     emsize,
     hidden_dim,
     output_dim,
-    n_layers=2,
+    n_layers=1,
     bidirectional=False,
     dropout_rate=0.2,
     pad_index=pad_index).to(device)
@@ -100,18 +100,18 @@ model = LSTM(
 def train(dataloader):
     model.train()
     total_acc, total_count = 0, 0
-    log_interval = 500
+    log_interval = 10
     start_time = time.time()
 
     for idx, (label, text, offsets) in enumerate(dataloader):
-        if idx == 0 or idx == 1:
+        if idx == 0:
             print('label: ', label.shape)
             print('text: ', text.shape)
             print('offset ', offsets.shape)
 
         optimizer.zero_grad()
 
-        predicted_label = model(text)#, offsets)
+        predicted_label = model(text, offsets)
 
         loss = criterion(predicted_label, label)
 

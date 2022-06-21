@@ -24,6 +24,7 @@ BATCH_SIZE = 64  # batch size for training
 emsize = 128
 hidden_dim = 64
 output_dim = 50
+num_classes = 4
 
 # define device as a gpu or a cpu
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -79,15 +80,21 @@ dataloader = DataLoader(
 unk_index = vocab['<unk>']
 pad_index = vocab['<pad>']
 
+# model = LSTMTagger(
+#     vocab_size,
+#     emsize,
+#     hidden_dim,
+#     output_dim,
+#     n_layers=2,
+#     bidirectional=False,
+#     dropout_rate=0.2,
+#     pad_index=pad_index).to(device)
+
 model = LSTMTagger(
-    vocab_size,
     emsize,
     hidden_dim,
-    output_dim,
-    n_layers=2,
-    bidirectional=False,
-    dropout_rate=0.2,
-    pad_index=pad_index).to(device)
+    vocab_size,
+    num_classes).to(device)
 
 
 def train(dataloader):

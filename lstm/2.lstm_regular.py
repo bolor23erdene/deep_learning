@@ -1,5 +1,4 @@
-from torchtext.data.functional import to_map_style_dataset
-from torch.utils.data.dataset import random_split
+
 import time
 from torch.nn.utils.rnn import pad_sequence
 import torch
@@ -122,6 +121,8 @@ def train(dataloader):
             total_acc, total_count = 0, 0
             start_time = time.time()
 
+from torchtext.data.functional import to_map_style_dataset
+from torch.utils.data.dataset import random_split
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(model.parameters(), lr=LR)

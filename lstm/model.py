@@ -102,11 +102,12 @@ class LSTM_ATTN(nn.Module):
         #merged_state = merged_state.squeeze(0).unsqueeze(2) 
         final_state = final_state.permute(1, 2, 0)
         #print("modified final_state: ", final_state.shape)
-        weights = torch.bmm(lstm_output, final_state) # batch, seq_len, hidden x batch, hidden, 1 
+        #batch x matrix x matrix
+        weights = torch.bmm(lstm_output, final_state) # (batch, seq_len, hidden) x (batch, hidden, 1) = (batch, seq, 1)
         #print("weights bmm(lstm_out, hidden): ", weights.shape)   
-        weights = F.softmax(weights.squeeze(2), dim=1).unsqueeze(2) # batch x seq_len
+        weights = F.softmax(weights.squeeze(2), dim=1).unsqueeze(2) # batch x seq_len x 1
         #print("F.softmax(weights.squeeze(2), dim=1).unsqueeze(2): ", weights.shape) 
-        att_output = torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2)
+        att_output = torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2) # b x h x s x (b x s x 1) = b x h 
         #print("torch.bmm(torch.transpose(lstm_output, 1, 2), weights).squeeze(2): ", att_output.shape)   
         return att_output
     

@@ -15,7 +15,7 @@ from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torch.utils.data import DataLoader
 
-from model import LSTMTagger
+from model import LSTM
 
 # Hyperparameters
 EPOCHS = 10  # epoch
@@ -80,21 +80,21 @@ dataloader = DataLoader(
 unk_index = vocab['<unk>']
 pad_index = vocab['<pad>']
 
-# model = LSTMTagger(
-#     vocab_size,
-#     emsize,
-#     hidden_dim,
-#     output_dim,
-#     n_layers=2,
-#     bidirectional=False,
-#     dropout_rate=0.2,
-#     pad_index=pad_index).to(device)
-
-model = LSTMTagger(
+model = LSTM(
+    vocab_size,
     emsize,
     hidden_dim,
-    vocab_size,
-    num_classes).to(device)
+    output_dim,
+    n_layers=2,
+    bidirectional=False,
+    dropout_rate=0.2,
+    pad_index=pad_index).to(device)
+
+# model = LSTMTagger(
+#     emsize,
+#     hidden_dim,
+#     vocab_size,
+#     num_classes)
 
 
 def train(dataloader):

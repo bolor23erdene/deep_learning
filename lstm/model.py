@@ -59,13 +59,13 @@ class LSTM(nn.Module):
     #     return prediction
     
     
-    def forward(self, sentence):
-        embeds = self.word_embeddings(sentence)
-        lstm_out, (hidden, cell) = self.lstm(embeds.view(len(sentence), 1, -1)) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
+    def forward(self, ids):
+        embedded = self.embeddings(ids)
+        lstm_out, (hidden, cell) = self.lstm(embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         #att_output = self.attention(lstm_out, hidden)
-        pred = self.hidden2tag(hidden)
+        pred = self.fc(lstm_out)
         
-        print("embeds: ", embeds.shape)
+        print("embeds: ", embedded.shape)
         print("lstm_out: ", lstm_out.shape)
         print("tag_space: ", hidden.shape)
         print("tag_scores: ", pred.shape)

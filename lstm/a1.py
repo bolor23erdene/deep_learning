@@ -74,11 +74,11 @@ import time
 def train(dataloader):
     model.train()
     total_acc, total_count = 0, 0
-    log_interval = 10
+    log_interval = 1
     start_time = time.time()
 
     for idx, (label, text, offsets) in enumerate(dataloader):
-        if idx == 0 or idx == 1:
+        if idx == 0:
             print('label: ', label.shape)
             print('text: ', text.shape)
             print('offset ', offsets.shape)

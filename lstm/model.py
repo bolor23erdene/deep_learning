@@ -20,7 +20,7 @@ class LSTM(nn.Module):
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_index)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers, bidirectional=bidirectional,
                             dropout=dropout_rate, batch_first=True)
-        self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
+        self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, 4)
         self.dropout = nn.Dropout(dropout_rate)
         
         # self.fc1 = nn.Linear(hidden_dim, 1)

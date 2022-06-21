@@ -111,7 +111,7 @@ def train(dataloader):
 
         optimizer.zero_grad()
 
-        predicted_label = model(text, offsets)
+        predicted_label = model(text)
 
         loss = criterion(predicted_label, label)
 

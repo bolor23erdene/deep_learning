@@ -74,7 +74,7 @@ import time
 def train(dataloader):
     model.train()
     total_acc, total_count = 0, 0
-    log_interval = 500
+    log_interval = 10
     start_time = time.time()
 
     for idx, (label, text, offsets) in enumerate(dataloader):

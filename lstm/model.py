@@ -62,13 +62,14 @@ class LSTM(nn.Module):
     def forward(self, ids):
         embedded = self.embedding(ids)
         print("embeds: ", embedded.shape)
+        # 64, 127, 128
         lstm_out, (hidden, cell) = self.lstm(embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         print("lstm_out: ", lstm_out.shape)
-        #att_output = self.attention(lstm_out, hidden)
+        # 64, 127, 64 
         pred = self.fc(lstm_out.squeeze(0))
         print("pred: ", pred.shape)
+        # 64, 127, 1
         
-
         return pred
     
 class LSTM_ATTN(nn.Module):

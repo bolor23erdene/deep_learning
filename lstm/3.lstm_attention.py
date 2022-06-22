@@ -87,6 +87,9 @@ def train(dataloader):
         
         predicted_label = model(text, offsets)
         
+        print("predicted_label", predicted_label.shape)
+        print("label", label.shape)
+        
         loss = criterion(predicted_label, label)
         
         loss.backward()

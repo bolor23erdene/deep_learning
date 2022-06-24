@@ -20,7 +20,7 @@ class LSTM(nn.Module):
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_index)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers, bidirectional=bidirectional,
                             dropout=dropout_rate, batch_first=True)
-        self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, 1)
+        self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
         self.dropout = nn.Dropout(dropout_rate)
         
         # self.fc1 = nn.Linear(hidden_dim, 1)
@@ -66,9 +66,10 @@ class LSTM(nn.Module):
         lstm_out, (hidden, cell) = self.lstm(embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         print("lstm_out: ", lstm_out.shape)
         # 64, 127, 64 
-        pred = self.fc(lstm_out.squeeze(0))
+        lstm_out = lstm_out.view(64, -1)
+        pred = self.fc(lstm_out)
         print("pred: ", pred.shape)
-        # 64, 127, 1
+        # 64, 127, 4
         
         return pred
     

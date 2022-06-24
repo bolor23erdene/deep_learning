@@ -23,8 +23,8 @@ LR = 5  # learning rate
 BATCH_SIZE = 64  # batch size for training
 emsize = 128
 hidden_dim = 64
-output_dim = 50
-num_classes = 4
+output_dim = 4
+#num_classes = 4
 
 # define device as a gpu or a cpu
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

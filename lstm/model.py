@@ -66,7 +66,7 @@ class LSTM(nn.Module):
         lstm_out, (hidden, cell) = self.lstm(embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         print("lstm_out: ", lstm_out.shape)
         # 64, 127, 64 
-        lstm_out = lstm_out.view(64, -1)
+        lstm_out = lstm_out.reshape(64, -1)
         pred = self.fc(lstm_out)
         print("pred: ", pred.shape)
         # 64, 127, 4

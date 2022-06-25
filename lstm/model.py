@@ -73,7 +73,7 @@ class LSTM(nn.Module):
         # 64, 127, 4
         pred = pred.view(64, -1)
         
-        pred = pred[:, -1]
+       # pred = pred[:, -1]
         
         return pred
     

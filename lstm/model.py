@@ -44,7 +44,9 @@ class LSTM(nn.Module):
         
         #output, output_lengths = nn.utils.rnn.pad_packed_sequence(lstm_out)
         
-        hidden = self.dropout(torch.cat(hidden[-2,:,:], hidden[-1,:,:]), dim = 1)
+        #hidden = self.dropout(torch.cat(hidden[-2,:,:], hidden[-1,:,:]), dim = 1)
+        hidden = self.dropout(torch.cat(hidden[-1,:,:]), dim = 1)
+
         
         pred = self.fc(hidden)
         print("pred: ", pred.shape)

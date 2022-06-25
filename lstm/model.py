@@ -38,6 +38,9 @@ class LSTM(nn.Module):
         # 64, 127, 128
         
         #The pack_padded_sequence is a format that enables the model to ignore the padded elements.
+        #LSTM model does not distinguish between padded elements and regular elements, but using this function it will 
+        # not perform gradients calculation for backpropagation step for the padded values
+        # https://suzyahyah.github.io/pytorch/2019/07/01/DataLoader-Pad-Pack-Sequence.html
         packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)    
         
         lstm_out, (hidden, cell) = self.lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers

@@ -37,7 +37,7 @@ class LSTM(nn.Module):
         packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)    
         
         lstm_out, (hidden, cell) = self.lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
-        print("lstm_out: ", lstm_out.shape)
+        #print("lstm_out: ", lstm_out.shape)
         # 64, 127, 64 
         # hidden -> 64, 1, 64
         #lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)

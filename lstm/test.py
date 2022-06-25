@@ -123,32 +123,3 @@ class TestDataPreparation(unittest.TestCase):
                          "hidden dimension size")
 
 
-
-
-
-# x = [torch.tensor([3,4,5,6]), torch.tensor([1,2]), torch.tensor([7])]
-# x_padded = pad_sequence(x, batch_first=True, padding_value=0)
-# text_lengths = torch.tensor([4, 2, 1])
-
-# print(x_padded)
-
-
-# # batch_size x seq_len
-# embedding = nn.Embedding(10, embedding_dim, 0)
-# embedded = embedding(x_padded)
-
-# print(embedded.shape)
-
-# # batch_size x seq_len x embed_dim
-# packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)    
-
-# print(packed_embedded)
-# print(len(packed_embedded))
-# print(packed_embedded.data.shape)
-
-# lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers, bidirectional=bidirectional,
-#                     dropout=dropout_rate, batch_first=True)
-
-# lstm_out, (hidden, cell) = lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
-
-# print(hidden.shape)

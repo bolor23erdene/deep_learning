@@ -23,8 +23,8 @@ LR = 5  # learning rate
 BATCH_SIZE = 64  # batch size for training
 emsize = 128
 hidden_dim = 64
-output_dim = 4
-#num_classes = 4
+output_dim = 64
+num_classes = 4
 
 # define device as a gpu or a cpu
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,7 +66,7 @@ def collate_batch(batch):
     label_list = torch.tensor(label_list, dtype=torch.int64)
     offsets = torch.tensor(offsets, dtype=torch.int64)
     # pad_sequence is the magical function
-    #text_list = pad_sequence(text_list, offsets, batch_first=True, padding_value=0)
+    text_list = pad_sequence(text_list, batch_first=True, padding_value=0)
     return label_list.to(device), text_list.to(device), offsets.to(device)
 
 
@@ -111,7 +111,7 @@ def train(dataloader):
 
         optimizer.zero_grad()
 
-        predicted_label = model(text, offsets)
+        predicted_label = model(text)
         
         print("predicted_label", predicted_label.shape)
         print("predicted_label", label.shape)

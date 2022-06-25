@@ -30,30 +30,22 @@ class LSTM(nn.Module):
     
     
     def forward(self, text, text_lengths):
+        print("text_shape: ", text.shape)
+        print("text_lengths: ", text_lengths)
+        
         embedded = self.embedding(text)
         print("embeds: ", embedded.shape)
         # 64, 127, 128
         
+        #The pack_padded_sequence is a format that enables the model to ignore the padded elements.
         packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)    
         
         lstm_out, (hidden, cell) = self.lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
-        #print("lstm_out: ", lstm_out.shape)
-        # 64, 127, 64 
-        # hidden -> 64, 1, 64
-        #lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
-        
-        #output, output_lengths = nn.utils.rnn.pad_packed_sequence(lstm_out)
-        
-        #hidden = self.dropout(torch.cat(hidden[-2,:,:], hidden[-1,:,:]), dim = 1)
         hidden = self.dropout(hidden[-1,:,:])
 
         
         pred = self.fc(hidden)
         print("pred: ", pred.shape)
-    #     # 64, 127, 4
-    #     pred = pred.view(64, -1)
-        
-    #    # pred = pred[:, -1]
         
         return pred
     

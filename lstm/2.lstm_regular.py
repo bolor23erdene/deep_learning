@@ -66,7 +66,7 @@ def collate_batch(batch):
     label_list = torch.tensor(label_list, dtype=torch.int64)
     offsets = torch.tensor(offsets, dtype=torch.int64)
     # pad_sequence is the magical function
-    #text_list = pad_sequence(text_list, batch_first=True, padding_value=0)
+    text_list = pad_sequence(text_list, offsets, batch_first=True, padding_value=0)
     return label_list.to(device), text_list.to(device), offsets.to(device)
 
 
@@ -111,7 +111,7 @@ def train(dataloader):
 
         optimizer.zero_grad()
 
-        predicted_label = model(text, offsets)
+        predicted_label = model(text)#, offsets)
         
         print("predicted_label", predicted_label.shape)
         print("predicted_label", label.shape)

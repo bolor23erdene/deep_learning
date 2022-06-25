@@ -111,7 +111,7 @@ def train(dataloader):
 
         optimizer.zero_grad()
 
-        predicted_label = model(text)
+        predicted_label = model(text, offsets)
         
         print("predicted_label", predicted_label.shape)
         print("predicted_label", label.shape)

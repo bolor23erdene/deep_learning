@@ -67,7 +67,7 @@ def collate_batch(batch):
     offsets = torch.tensor(offsets, dtype=torch.int64)
     #text_list = torch.tensor(text_list, dtype=torch.int64)
     # pad_sequence is the magical function
-    text_list = pad_sequence(text_list, offsets, batch_first=True, padding_value=0)
+    text_list = pad_sequence(text_list, batch_first=True, padding_value=0)
     return label_list.to(device), text_list.to(device), offsets.to(device)
 
 

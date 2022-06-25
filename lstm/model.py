@@ -34,7 +34,7 @@ class LSTM(nn.Module):
         print("embeds: ", embedded.shape)
         # 64, 127, 128
         
-        packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True)    
+        packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)    
         
         lstm_out, (hidden, cell) = self.lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         print("lstm_out: ", lstm_out.shape)

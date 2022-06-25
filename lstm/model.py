@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.nn.utils.rnn import pad_sequence
+from torch.nn.utils.rnn import pack_padded_sequence
 
 torch.manual_seed(1)
 
@@ -33,7 +34,7 @@ class LSTM(nn.Module):
         print("embeds: ", embedded.shape)
         # 64, 127, 128
         
-        packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, text_lengths)
+        packed_embedded = pack_padded_sequence(embedded, text_lengths, batch_first=True)    
         
         lstm_out, (hidden, cell) = self.lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         print("lstm_out: ", lstm_out.shape)

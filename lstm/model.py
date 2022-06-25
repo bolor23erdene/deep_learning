@@ -71,6 +71,9 @@ class LSTM(nn.Module):
         pred = self.fc(lstm_out)
         print("pred: ", pred.shape)
         # 64, 127, 4
+        pred = pred.view(self.batch_size, -1)
+        
+        pred = pred[:, -1]
         
         return pred
     

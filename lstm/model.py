@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+from torch.nn.utils.rnn import pad_sequence
 
 torch.manual_seed(1)
 
@@ -18,62 +19,38 @@ class LSTM(nn.Module):
                  dropout_rate, pad_index):
         super().__init__()
         self.hidden_dim = hidden_dim
+        self.output_dim = output_dim 
+        
         self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_index)
         self.lstm = nn.LSTM(embedding_dim, hidden_dim, n_layers, bidirectional=bidirectional,
                             dropout=dropout_rate, batch_first=True)
         self.fc = nn.Linear(hidden_dim * 2 if bidirectional else hidden_dim, output_dim)
         self.dropout = nn.Dropout(dropout_rate)
-        
-        # self.fc1 = nn.Linear(hidden_dim, 1)
-        # self.tanh = nn.Tanh(self.fc1)
-        # self.soft = nn.Softmax(self.tanh)
-        #self.tanh = nn.Tanh()
-        
-    # def forward(self, ids, length):
-    #     # ids = [batch size, seq len]
-    #     # length = [batch size]
-    #     embedded = self.dropout(self.embedding(ids))
-    #     # embedded = [batch size, seq len, embedding dim]
-    #     packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, lengths=length.cpu(), batch_first=True, 
-    #                                                         enforce_sorted=False)
-        
-    #     packed_output, (hidden, cell) = self.lstm(packed_embedded) ## n_layer x batch_size x hidden_dim
-    #     # hidden = [n layers * n directions, batch size, hidden dim]
-    #     # cell = [n layers * n directions, batch size, hidden dim]
-    #     output, output_length = nn.utils.rnn.pad_packed_sequence(packed_output) ## output = [batch size, seq len, hidden dim * n directions]
-        
-    #     # x = self.fc1(output) #batch, seq_len, hid_dim
-    #     # x = self.tanh(x)
-    #     # x = self.soft(x)
-    #     #context = torch.matmul(output, alpha)
-        
-    #     #context = torch.matmul(output, x) # batch, seq_len, hid_dim - batch, seq_len, 1
-    #     if self.lstm.bidirectional:
-    #         hidden = self.dropout(torch.cat([hidden[-1], hidden[-2]], dim=-1))
-    #         # hidden = [batch size, hidden dim * 2]
-    #     else:
-    #         hidden = self.dropout(hidden[-1])
-    #         #hidden = [batch size, hidden dim]
-    #     prediction = self.fc(hidden)
-    #     #prediction = self.fc(context)
-    #     # prediction = [batch size, output dim]
-    #     return prediction
     
     
-    def forward(self, ids):
-        embedded = self.embedding(ids)
+    def forward(self, text, text_lengths):
+        embedded = self.embedding(text)
         print("embeds: ", embedded.shape)
         # 64, 127, 128
-        lstm_out, hidden = self.lstm(embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
+        
+        packed_embedded = nn.utils.rnn.pack_padded_sequence(embedded, text_lengths)
+        
+        lstm_out, (hidden, cell) = self.lstm(packed_embedded) # sequence_len x 1 x 10=hidden_dim - there will be 5=seq_len hidden layers
         print("lstm_out: ", lstm_out.shape)
         # 64, 127, 64 
-        lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
-        pred = self.fc(lstm_out)
-        print("pred: ", pred.shape)
-        # 64, 127, 4
-        pred = pred.view(64, -1)
+        # hidden -> 64, 1, 64
+        #lstm_out = lstm_out.contiguous().view(-1, self.hidden_dim)
         
-       # pred = pred[:, -1]
+        #output, output_lengths = nn.utils.rnn.pad_packed_sequence(lstm_out)
+        
+        hidden = self.dropout(torch.cat((hidden[-2,:,:], hidden[-1,:,:]), dim = 1))
+        
+        pred = self.fc(hidden)
+        print("pred: ", pred.shape)
+    #     # 64, 127, 4
+    #     pred = pred.view(64, -1)
+        
+    #    # pred = pred[:, -1]
         
         return pred
     

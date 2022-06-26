@@ -19,11 +19,11 @@ class Encoder(nn.Module):
         self.embedder = nn.Embedding(eng_vocab_size, emb_dim, padding_idx=pad_idx)
         self.rnn = nn.LSTM(emb_dim, enc_hid_dim, n_layers, bidirectional=bidirectional, batch_first=False)
         
-    def forward(self, input):
+    def forward(self, input, input_lens):
         # input = [seq_len x batch x eng_vocab_size]
         embedded = self.embedder(input)
         
-        packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)  
+        packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=True, enforce_sorted=False)  
         # embedded = [seq_len x batch x emb_dim]
         output, (hidden, cell) = self.rnn(packed_embedded)
         

@@ -143,7 +143,7 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         print("encoder hidden: ", hidden.shape)
         print("encoder cell: ", cell.shape)
         
-        out, (hidden, cell) = decoder(hidden, cell)
+        out, (hidden, cell) = decoder(de_batch[:, 1], hidden, cell)
         
         print("encoder out: ", out.shape)
         print("decoder hidden: ", hidden.shape)

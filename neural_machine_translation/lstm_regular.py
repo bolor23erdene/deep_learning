@@ -75,8 +75,8 @@ def generate_batch(data_batch):
     en_batch.append(torch.cat([torch.tensor([BOS_IDX]), en_item, torch.tensor([EOS_IDX])], dim=0))
     en_text_lens.append(en_item.size(0))
     de_text_lens.append(de_item.size(0))
-  de_batch = pad_sequence(de_batch, padding_value=EN_PAD_IDX)
-  en_batch = pad_sequence(en_batch, padding_value=EN_PAD_IDX)
+  de_batch = pad_sequence(de_batch, batch_first = True, padding_value=EN_PAD_IDX)
+  en_batch = pad_sequence(en_batch, batch_first = True, padding_value=EN_PAD_IDX)
   return en_batch, de_batch, en_text_lens, de_text_lens
 
 train_iter = DataLoader(train_data, batch_size=BATCH_SIZE,

@@ -21,6 +21,7 @@ class Encoder(nn.Module):
         
     def forward(self, input, input_lens):
         # input = [seq_len x batch x eng_vocab_size]
+        print(input.shape, input_lens)
         embedded = self.embedder(input)
         
         packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=True, enforce_sorted=False)  

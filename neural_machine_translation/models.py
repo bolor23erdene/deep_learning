@@ -23,8 +23,9 @@ class Encoder(nn.Module):
         # input = [seq_len x batch x eng_vocab_size]
         embedded = self.embedder(input)
         
+        packed_embedded = pack_padded_sequence(embedded, text_lengths.cpu(), batch_first=True, enforce_sorted=False)  
         # embedded = [seq_len x batch x emb_dim]
-        output, (hidden, cell) = self.rnn(embedded)
+        output, (hidden, cell) = self.rnn(packed_embedded)
         
         # output = [seq_len x batch x enc_hid_dim]
         # hidden = [1 x batch x enc_hid_dim]

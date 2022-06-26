@@ -68,13 +68,15 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 
 def generate_batch(data_batch):
-  de_batch, en_batch = [], []
+  de_batch, en_batch, en_text_lens, de_text_lens = [], [], [], []
   for (de_item, en_item) in data_batch:
     de_batch.append(torch.cat([torch.tensor([BOS_IDX]), de_item, torch.tensor([EOS_IDX])], dim=0))
     en_batch.append(torch.cat([torch.tensor([BOS_IDX]), en_item, torch.tensor([EOS_IDX])], dim=0))
+    en_text_lens.append(en_item.size(0))
+    de_text_lens.append(de_item.size(0))
   de_batch = pad_sequence(de_batch, padding_value=PAD_IDX)
   en_batch = pad_sequence(en_batch, padding_value=PAD_IDX)
-  return en_batch, de_batch
+  return en_batch, de_batch, en_text_lens, de_text_lens
 
 train_iter = DataLoader(train_data, batch_size=BATCH_SIZE,
                         shuffle=True, collate_fn=generate_batch)
@@ -113,14 +115,14 @@ total_acc, total_count = 0, 0
 log_interval = 10
 start_time = time.time()
 
-for idx, (en_batch, de_batch) in enumerate(train_iter):
+for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_iter):
     if idx == 0:
         print('eng batch: ', en_batch.shape)
         print('de batch: ', de_batch.shape)
 
         optimizer.zero_grad()
 
-        hidden, cell = encoder(en_batch)
+        hidden, cell = encoder(en_batch, en_text_lens)
         
         print("hidden", hidden.shape)
         print("cell", cell.shape)

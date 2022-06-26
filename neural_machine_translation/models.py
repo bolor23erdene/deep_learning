@@ -82,27 +82,27 @@ class Seq2Seq():
             
             
             
-encoder = Encoder()
-decoder = Decoder()
-seq2seq = Seq2Seq(encoder, decoder, de_vocab_size, de_output)
+# encoder = Encoder()
+# decoder = Decoder()
+# seq2seq = Seq2Seq(encoder, decoder, de_vocab_size, de_output)
             
-def train(dataloader):
+# def train(dataloader):
     
     
-    for idx, (label, text, text_lengths) in enumerate(dataloader):
+#     for idx, (label, text, text_lengths) in enumerate(dataloader):
         
-        outputs = seq2seq(text)
+#         outputs = seq2seq(text)
         
-        loss = criterion(outputs, label)
+#         loss = criterion(outputs, label)
         
-        loss.backward()
+#         loss.backward()
         
-        optimizer.step()
+#         optimizer.step()
         
-        total_acc += 
-        total_count += label.size(0)
+#         total_acc += 
+#         total_count += label.size(0)
         
-        print("acc: ", total_acc/total_count)
+#         print("acc: ", total_acc/total_count)
         
         
         

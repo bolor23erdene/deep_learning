@@ -38,6 +38,9 @@ def build_vocab(filepath, tokenizer):
 de_vocab = build_vocab(train_filepaths[0], de_tokenizer)
 en_vocab = build_vocab(train_filepaths[1], en_tokenizer)
 
+de_vocab.set_default_index(vocab["<unk>"])
+en_vocab.set_default_index(vocab["<unk>"])
+
 print(en_vocab)
 print(de_vocab)
 print('en', len(en_vocab), len(de_vocab))

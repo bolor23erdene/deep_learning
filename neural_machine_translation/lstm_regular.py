@@ -74,7 +74,7 @@ def generate_batch(data_batch):
     en_batch.append(torch.cat([torch.tensor([BOS_IDX]), en_item, torch.tensor([EOS_IDX])], dim=0))
   de_batch = pad_sequence(de_batch, padding_value=PAD_IDX)
   en_batch = pad_sequence(en_batch, padding_value=PAD_IDX)
-  return de_batch, en_batch
+  return en_batch, de_batch
 
 train_iter = DataLoader(train_data, batch_size=BATCH_SIZE,
                         shuffle=True, collate_fn=generate_batch)
@@ -113,15 +113,14 @@ total_acc, total_count = 0, 0
 log_interval = 10
 start_time = time.time()
 
-for idx, (label, text, offsets) in enumerate(train_iter):
+for idx, (en_batch, de_batch) in enumerate(train_iter):
     if idx == 0:
-        print('label: ', label.shape)
-        print('text: ', text.shape)
-        print('offset ', offsets.shape)
+        print('eng batch: ', en_batch.shape)
+        print('de batch: ', de_batch.shape)
 
         optimizer.zero_grad()
 
-        hidden, cell = encoder(text)
+        hidden, cell = encoder(en_batch)
         
         print("hidden", hidden.shape)
         print("cell", cell.shape)

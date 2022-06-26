@@ -13,9 +13,9 @@ from torch.nn.utils.rnn import pad_sequence
 from torch.nn.utils.rnn import pack_padded_sequence
 
 
-
 class Encoder(nn.Module):
     def __init__(self, emb_dim, enc_hid_dim, eng_vocab_size, n_layers, bidirectional):
+        super().__init__()
         self.embedder = nn.Embedding(eng_vocab_size, emb_dim)
         self.rnn = nn.LSTM(emb_dim, enc_hid_dim, n_layers, bidirectional=bidirectional, batch_first=False)
         

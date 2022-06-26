@@ -6,7 +6,7 @@ import torchtext
 import torch
 from torchtext.data.utils import get_tokenizer
 from collections import Counter
-from torchtext.vocab import Vocab
+from torchtext.vocab import vocab
 from torchtext.utils import download_from_url, extract_archive
 import io
 
@@ -33,10 +33,15 @@ def build_vocab(filepath, tokenizer):
   with io.open(filepath, encoding="utf8") as f:
     for string_ in f:
       counter.update(tokenizer(string_))
-  return Vocab(counter, specials=['<unk>', '<pad>', '<bos>', '<eos>'])
+  return vocab(counter, specials=['<unk>', '<pad>', '<bos>', '<eos>'])
 
 de_vocab = build_vocab(train_filepaths[0], de_tokenizer)
 en_vocab = build_vocab(train_filepaths[1], en_tokenizer)
+
+print(en_vocab)
+print(de_vocab)
+print('en', len(en_vocab), len(de_vocab))
+
 
 def data_process(filepaths):
   raw_de_iter = iter(io.open(filepaths[0], encoding="utf8"))

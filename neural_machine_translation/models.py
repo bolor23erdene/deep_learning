@@ -32,7 +32,7 @@ class Encoder(nn.Module):
         # hidden = [1 x batch x enc_hid_dim]
         # cell =   [1 x batch x enc_hid_dim]
         
-        return hidden, cell 
+        return hidden.squeeze(0), cell.squeeze(0) 
         
         
     

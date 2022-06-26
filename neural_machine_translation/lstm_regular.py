@@ -33,7 +33,7 @@ def build_vocab(filepath, tokenizer):
   with io.open(filepath, encoding="utf8") as f:
     for string_ in f:
       counter.update(tokenizer(string_))
-  return Vocab(counter)#, specials=['<unk>', '<pad>', '<bos>', '<eos>'])
+  return Vocab(counter, specials=['<unk>', '<pad>', '<bos>', '<eos>'])
 
 de_vocab = build_vocab(train_filepaths[0], de_tokenizer)
 en_vocab = build_vocab(train_filepaths[1], en_tokenizer)

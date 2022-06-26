@@ -98,7 +98,7 @@ import time
 
 eng_vocab_size = len(en_vocab)
 
-encoder = Encoder(emb_dim=32, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False)
+encoder = Encoder(emb_dim=32, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, padding_index=PAD_IDX)
 
 LR = 5
 

@@ -96,7 +96,9 @@ from torchtext.data.functional import to_map_style_dataset
 from torch.utils.data.dataset import random_split
 import time
 
-encoder = Encoder()
+eng_vocab_size = len(en_vocab)
+
+encoder = Encoder(emb_dim=32, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False)
 
 LR = 5
 

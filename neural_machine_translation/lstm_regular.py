@@ -105,14 +105,15 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch import Tensor
 
-from models import Encoder
+from models import Encoder, Decoder
 from torchtext.data.functional import to_map_style_dataset
 from torch.utils.data.dataset import random_split
 import time
 
 eng_vocab_size = len(en_vocab)
+de_vocab_size = len(de_vocab)
 
-encoder = Encoder(emb_dim=32, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, pad_idx=EN_PAD_IDX)
+encoder = Encoder(emb_dim=64, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, pad_idx=EN_PAD_IDX)
 
 LR = 5
 
@@ -122,7 +123,10 @@ scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.1)
 total_accu = None
 
 
+decoder = Decoder(de_vocab_dim=de_vocab_size, dec_hid_dim=64, enc_hid_dim=32, bidirectional=False)
+
 encoder.train()
+decoder.train()
 total_acc, total_count = 0, 0
 log_interval = 10
 start_time = time.time()
@@ -136,8 +140,15 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
 
         hidden, cell = encoder(en_batch, en_text_lens)
         
-        print("hidden", hidden.shape)
-        print("cell", cell.shape)
+        print("encoder hidden: ", hidden.shape)
+        print("encoder cell: ", cell.shape)
+        
+        out, (hidden, cell) = decoder(hidden, cell)
+        
+        print("encoder out: ", out.shape)
+        print("decoder hidden: ", hidden.shape)
+        print("decoder cell: ", cell.shape)
+    
 
         # loss = criterion(hidden, label)
 

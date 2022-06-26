@@ -38,22 +38,22 @@ class Encoder(nn.Module):
     
     
     
-class Decoder():
-    def __init__(self, de_vocab_dim, dec_hid_dim,):
+class Decoder(nn.Module):
+    def __init__(self, de_vocab_dim, dec_hid_dim, enc_hid_dim, bidirectional):
     
-        self.rnn = nn.LSTM()
+        self.rnn = nn.LSTM(enc_hid_dim, dec_hid_dim, n_layers=1, bidirectional=bidirectional, batch_first=False)
         self.fc = nn.Linear(dec_hid_dim, de_vocab_dim)
     
-    def forward(self, hidden, cell):
+    def forward(self, input, hidden, cell):
         
         
-        out, (hidden, cell) = self.rnn(hidden, cell)
+        out, (hidden, cell) = self.rnn(input, (hidden, cell))
         
         # hidden = 1 x batch x dec_hid_size 
         output = self.fc(hidden)
         
         # output = 1 x batch x de_vocab_dim
-        output = nn.softmax(output, 2)
+        #output = nn.softmax(output, 2)
         
         return output, (hidden, cell)
     

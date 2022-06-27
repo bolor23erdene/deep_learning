@@ -143,11 +143,18 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         print("encoder hidden: ", hidden.shape)
         print("encoder cell: ", cell.shape)
         
-        out, (hidden, cell) = decoder(de_batch[:, 1], hidden, cell)
+        cur_word =  de_batch[:, 0]# batch x de_vocab_size
         
-        print("encoder out: ", out.shape)
-        print("decoder hidden: ", hidden.shape)
-        print("decoder cell: ", cell.shape)
+        for i in range(1):
+            print("cur_word: ", cur_word.shape)
+            
+            out, (hidden, cell) = decoder(cur_word, (hidden, cell))
+            
+            #cur_word = nn.softmax(hidden)
+            
+            print("encoder out: ", out.shape)
+            print("decoder hidden: ", hidden.shape)
+            print("decoder cell: ", cell.shape)
     
 
         # loss = criterion(hidden, label)

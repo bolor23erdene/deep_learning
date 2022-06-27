@@ -107,8 +107,10 @@ class Seq2Seq(nn.Module):
             output, (hidden, cell) = self.decoder(input_decoder, hidden, cell)
 
             print("output: ", output.shape)
+            
+            output = output.transpose(1, 0, 2)
 
-            outputs[t, :, :] = output
+            outputs[:, t, :] = output
             
             # predicted class or token from the predictions
             input_decoder = output.argmax(1)

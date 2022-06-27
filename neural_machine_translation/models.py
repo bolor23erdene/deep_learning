@@ -66,11 +66,12 @@ class Decoder(nn.Module):
         
         print("decoder input hidden: ", hidden.shape)
         
+        print(hidden)
+        print(out)
+        
         # hidden = 1 x batch x dec_hidden_dim or (out = 1 x batch x hid_dim)
         output = self.fc(hidden)
-        
-        print(hidden)
-        print(output)
+    
         
         print("decoder output: ", output.shape)
         

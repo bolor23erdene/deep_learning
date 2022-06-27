@@ -108,7 +108,7 @@ class Seq2Seq(nn.Module):
 
             print("output: ", output.shape)
             
-            output = output.transpose(1, 0, 2)
+            output = output.permute(1, 0, 2)
 
             outputs[:, t, :] = output
             

@@ -25,7 +25,8 @@ class Encoder(nn.Module):
         embedded = self.embedder(input)
         
         packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=False, enforce_sorted=False)  
-        # embedded = [seq_len x batch x emb_dim]
+        
+        # packed_embedded = [seq_len x batch x emb_dim]
         output, (hidden, cell) = self.rnn(packed_embedded)
         
         # output = [seq_len x batch x enc_hid_dim]

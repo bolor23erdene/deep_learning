@@ -48,11 +48,17 @@ class Decoder(nn.Module):
     
     def forward(self, input, hidden, cell):
         
+        print("decoder input hidden: ", hidden.shape)
+        
         
         out, (hidden, cell) = self.rnn(input.unsqueeze(0), (hidden, cell))
         
+        print("decoder input hidden: ", hidden.shape)
+        
         # hidden = 1 x batch x dec_hid_size 
         output = self.fc(hidden)
+        
+        print("decoder output: ", output.shape)
         
         # output = 1 x batch x de_vocab_dim
         #output = nn.softmax(output, 2)

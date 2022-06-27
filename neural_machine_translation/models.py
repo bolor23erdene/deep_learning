@@ -51,7 +51,7 @@ class Decoder(nn.Module):
     def forward(self, input, hidden, cell):
         
         # input = 1 x batch 
-        input = input.unsqueeze(0)
+        #input = input.unsqueeze(0)
         
         print("decoder input: ", input.shape)
         
@@ -100,7 +100,7 @@ class Seq2Seq(nn.Module):
         outputs = torch.zeros((seq_len, batch_size, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
     
         # de_batch = 
-        input_decoder = de_batch[0, :]
+        input_decoder = de_batch[:, 0]
     
         for t in range(1, seq_len):
             

@@ -10,6 +10,8 @@ from torchtext.vocab import vocab
 from torchtext.utils import download_from_url, extract_archive
 import io
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 url_base = 'https://raw.githubusercontent.com/multi30k/dataset/master/data/task1/raw/'
 train_urls = ('train.de.gz', 'train.en.gz')
 val_urls = ('val.de.gz', 'val.en.gz')
@@ -65,7 +67,7 @@ test_data = data_process(test_filepaths)
 """Dataloaders"""
 import torch
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 
 BATCH_SIZE = 128
 DE_PAD_IDX = de_vocab['<pad>']
@@ -136,28 +138,21 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
     optimizer.zero_grad()
     
     if idx == 0:
-        print('eng batch: ', en_batch.shape)
-        print('de batch: ', de_batch.shape)
-
-        hidden, cell = encoder(en_batch, en_text_lens, de_batch)
         
-        print("encoder hidden: ", hidden.shape)
-        print("encoder cell: ", cell.shape)
+        predictions = seq2seq(en_batch, en_text_lens, de_batch)
         
-        cur_word =  torch.tensor(de_batch[:, 0])# batch x de_vocab_size
-        
-        seq2seq()
-        
-        
+        loss = criterion(predictions, de_batch)
     
 
         # loss = criterion(hidden, label)
 
-        # loss.backward()
-        # optimizer.step()
+        loss.backward()
+        optimizer.step()
 
-        # total_acc += (predicted_label.argmax(1) == label).sum().item()
-        # total_count += label.size(0)
+        total_acc += (predictions.argmax(1) == de_batch).sum().item()
+        total_count += de_batch.size(0)
+        
+        print(total_acc/total_count)
 
         # elapsed = time.time() - start_time
         # print('| epoch {:3d} | {:5d}/{:5d} batches '

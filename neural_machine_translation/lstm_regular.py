@@ -114,6 +114,7 @@ eng_vocab_size = len(en_vocab)
 de_vocab_size = len(de_vocab)
 
 encoder = Encoder(emb_dim=64, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, pad_idx=EN_PAD_IDX)
+decoder = Decoder(de_vocab_dim=de_vocab_size, dec_hid_dim=32, enc_hid_dim=32, n_layers=1, bidirectional=False)
 
 LR = 5
 
@@ -123,7 +124,6 @@ scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.1)
 total_accu = None
 
 
-decoder = Decoder(de_vocab_dim=de_vocab_size, dec_hid_dim=64, enc_hid_dim=32, n_layers=1, bidirectional=False)
 
 encoder.train()
 decoder.train()

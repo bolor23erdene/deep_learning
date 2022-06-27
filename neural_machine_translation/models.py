@@ -43,6 +43,7 @@ class Encoder(nn.Module):
 class Decoder(nn.Module):
     def __init__(self, de_vocab_dim, dec_hid_dim, emb_dim, n_layers, bidirectional):
         super().__init__()
+        self.de_vocab_dim = de_vocab_dim
         self.embedding = nn.Embedding(de_vocab_dim, emb_dim)
         self.rnn = nn.LSTM(emb_dim, dec_hid_dim, n_layers, bidirectional=bidirectional, batch_first=False)
         self.fc = nn.Linear(dec_hid_dim, de_vocab_dim)

@@ -69,7 +69,7 @@ class Decoder(nn.Module):
         print(hidden)
         print(out)
         
-        # hidden = 1 x batch x dec_hidden_dim or (out = 1 x batch x hid_dim)
+        # hidden = 1 x batch x dec_hidden_dim or (out = 1 x batch x hid_dim). In fact: out == hidden 
         output = self.fc(hidden)
     
         
@@ -80,28 +80,34 @@ class Decoder(nn.Module):
         
         return output, (hidden, cell)
     
-class Seq2Seq():
-    def __init__(self, encoder, decoder, de_vocab_size, de_output):
+class Seq2Seq(nn.Module):
+    def __init__(self, encoder, decoder, device):
+        super().__init__()
+        
         self.encoder = encoder 
         self.decoder = decoder 
-        self.de_vocab_size = de_vocab_size
-        self.de_output = de_output
+        self.device = device
         
-    def forward(self, input_in_eng):
+    def forward(self, en_batch, en_text_lens, de_batch):
         # input_in_eng = seq_len x batch_size 
-        seq_len = input_in_eng.size(0)
-        batch_size = input_in_eng.size(1)
-        target_len = self.de_output
+        seq_len = en_batch.size(0)
+        batch_size = en_batch.size(1)
+        de_vocab_dim = self.de_vocab_dim
         
-        hidden, cell = self.encoder(input_in_eng)
+        hidden, cell = self.encoder(en_batch, en_text_lens)
 
-        outputs = torch.zeros((seq_len, batch_size, self.de_vocab_size))# seq_len x batch x de_vocab_dim
+        outputs = torch.zeros((seq_len, batch_size, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
     
-        for t in range(target_len):
+        input_decoder = de_batch[0, :]
+    
+        for t in range(1, seq_len):
             
-            out_word_rep, (hidden, cell) = self.decoder(hidden, cell)
+            output, (hidden, cell) = self.decoder(input_decoder, hidden, cell)
 
-            outputs[t, :, :] = out_word_rep
+            outputs[t, :, :] = output
+            
+            # predicted class or token from the predictions
+            input_decoder = output.argmax(1)
             
         return outputs
             

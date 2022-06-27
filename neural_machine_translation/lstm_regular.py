@@ -105,7 +105,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch import Tensor
 
-from models import Encoder, Decoder
+from models import Encoder, Decoder, Seq2Seq
 from torchtext.data.functional import to_map_style_dataset
 from torch.utils.data.dataset import random_split
 import time
@@ -115,46 +115,40 @@ de_vocab_size = len(de_vocab)
 
 encoder = Encoder(emb_dim=64, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, pad_idx=EN_PAD_IDX)
 decoder = Decoder(de_vocab_dim=de_vocab_size, dec_hid_dim=32, emb_dim=32, n_layers=1, bidirectional=False)
+seq2seq = Seq2Seq(encoder, decoder, device)
 
 LR = 5
 
 criterion = torch.nn.CrossEntropyLoss()
 optimizer = torch.optim.SGD(encoder.parameters(), lr=LR)
 scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.1)
-total_accu = None
+# total_accu = None
 
-
-
-encoder.train()
-decoder.train()
+# encoder.train()
+# decoder.train()
 total_acc, total_count = 0, 0
 log_interval = 10
 start_time = time.time()
 
 for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_iter):
+    
+    
+    optimizer.zero_grad()
+    
     if idx == 0:
         print('eng batch: ', en_batch.shape)
         print('de batch: ', de_batch.shape)
 
-        optimizer.zero_grad()
-
-        hidden, cell = encoder(en_batch, en_text_lens)
+        hidden, cell = encoder(en_batch, en_text_lens, de_batch)
         
         print("encoder hidden: ", hidden.shape)
         print("encoder cell: ", cell.shape)
         
         cur_word =  torch.tensor(de_batch[:, 0])# batch x de_vocab_size
         
-        for i in range(1):
-            print("cur_word: ", cur_word.shape)
-            
-            out, (hidden, cell) = decoder(cur_word, hidden, cell)
-            
-            #cur_word = nn.softmax(hidden)
-            
-            print("encoder out: ", out.shape)
-            print("decoder hidden: ", hidden.shape)
-            print("decoder cell: ", cell.shape)
+        seq2seq()
+        
+        
     
 
         # loss = criterion(hidden, label)

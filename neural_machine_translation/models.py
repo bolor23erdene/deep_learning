@@ -53,27 +53,31 @@ class Decoder(nn.Module):
         # input = 1 x batch 
         #input = input.unsqueeze(0)
         
+        # 1 input = [128]
+        # 2 input = [128, 19215] 
         print("decoder input: ", input.shape)
+        
         
         # embedded = 1 x batch x emb_dim 
         embedded = self.embedding(input).unsqueeze(0)
         
+        # 1 embedded = [1, 32, 128]
         print("decoder embedded: ", embedded.shape)
         
+        # 1 decoder input hidden = []
         print("decoder input hidden: ", hidden.shape)
         
         # hidden = 1 x batch x dec_hid_dim & (expects: 1 x 29 x 32) 
         out, (hidden, cell) = self.rnn(embedded, (hidden, cell))
         
+        # 1 decoder input hidden = []
         print("decoder input hidden: ", hidden.shape)
         
-        print(hidden)
-        print(out)
         
         # hidden = 1 x batch x dec_hidden_dim or (out = 1 x batch x hid_dim). In fact: out == hidden 
         output = self.fc(hidden)
     
-        
+        # 1 output = 1 x 128 x 19215
         print("decoder output: ", output.shape)
         
         # output = 1 x batch x de_vocab_dim
@@ -113,6 +117,8 @@ class Seq2Seq(nn.Module):
             outputs[:, t, :] = output.squeeze(1)
             
             # predicted class or token from the predictions
+            print(output.shape)
+            print(output.argmax(0).shape, output.argmax(1).shape, output.argmax(2).shape)
             input_decoder = output.argmax(1)
             
         return outputs

@@ -141,18 +141,18 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         
         predictions = seq2seq(en_batch, en_text_lens, de_batch)
         
-        loss = criterion(predictions, de_batch)
+        #loss = criterion(predictions, de_batch)
     
 
         # loss = criterion(hidden, label)
 
-        loss.backward()
-        optimizer.step()
+        # loss.backward()
+        # optimizer.step()
 
-        total_acc += (predictions.argmax(1) == de_batch).sum().item()
-        total_count += de_batch.size(0)
+        # total_acc += (predictions.argmax(1) == de_batch).sum().item()
+        # total_count += de_batch.size(0)
         
-        print(total_acc/total_count)
+        # print(total_acc/total_count)
 
         # elapsed = time.time() - start_time
         # print('| epoch {:3d} | {:5d}/{:5d} batches '

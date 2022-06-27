@@ -47,7 +47,7 @@ class Decoder(nn.Module):
     def forward(self, input, hidden, cell):
         
         
-        out, (hidden, cell) = self.rnn(input, (hidden, cell))
+        out, (hidden, cell) = self.rnn(input.unsqueeze(0), (hidden, cell))
         
         # hidden = 1 x batch x dec_hid_size 
         output = self.fc(hidden)

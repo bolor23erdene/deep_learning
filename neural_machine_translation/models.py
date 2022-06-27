@@ -23,6 +23,7 @@ class Encoder(nn.Module):
         # input = [seq_len x batch x eng_vocab_size]
         print(input.shape, len(input_lens))
         embedded = self.embedder(input)
+        print('embedded: ', embedded.shape)
         
         packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=False, enforce_sorted=False)  
         

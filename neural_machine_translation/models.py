@@ -49,14 +49,24 @@ class Decoder(nn.Module):
     
     def forward(self, input, hidden, cell):
         
-        print("decoder input hidden: ", hidden.shape)
+        # input = 1 x batch x 1
         input = input.unsqueeze(0)
         
-        out, (hidden, cell) = self.rnn(input, (hidden, cell))
+        print("decoder input: ", input.shape)
+        
+        # embedded = 1 x batch x emb_dim 
+        embedded = self.embedding(input)
+        
+        print("decoder embedded: ", embedded.shape)
         
         print("decoder input hidden: ", hidden.shape)
         
-        # hidden = 1 x batch x dec_hid_size 
+        # hidden = 1 x batch x dec_hid_dim 
+        out, (hidden, cell) = self.rnn(embedded, (hidden, cell))
+        
+        print("decoder input hidden: ", hidden.shape)
+        
+        # hidden = 1 x batch x de_vocab_dim 
         output = self.fc(hidden)
         
         print("decoder output: ", output.shape)

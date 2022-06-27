@@ -143,7 +143,7 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         print("encoder hidden: ", hidden.shape)
         print("encoder cell: ", cell.shape)
         
-        cur_word =  de_batch[:, 0]# batch x de_vocab_size
+        cur_word =  torch.tensor(de_batch[:, 0])# batch x de_vocab_size
         
         for i in range(1):
             print("cur_word: ", cur_word.shape)

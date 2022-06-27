@@ -79,7 +79,7 @@ class Decoder(nn.Module):
         # output = 1 x batch x de_vocab_dim
         #output = nn.softmax(output, 2)
         
-        return output, (hidden, cell)
+        return output, (hidden.squeeze(0), cell.squeeze(0))
     
 class Seq2Seq(nn.Module):
     def __init__(self, encoder, decoder, device):

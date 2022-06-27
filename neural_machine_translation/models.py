@@ -92,7 +92,7 @@ class Seq2Seq(nn.Module):
         # input_in_eng = seq_len x batch_size 
         seq_len = en_batch.size(0)
         batch_size = en_batch.size(1)
-        de_vocab_dim = self.de_vocab_dim
+        de_vocab_dim = self.decoder.de_vocab_dim
         
         hidden, cell = self.encoder(en_batch, en_text_lens)
 

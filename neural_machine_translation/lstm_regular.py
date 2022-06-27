@@ -148,7 +148,7 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         for i in range(1):
             print("cur_word: ", cur_word.shape)
             
-            out, (hidden, cell) = decoder(cur_word, (hidden, cell))
+            out, (hidden, cell) = decoder(cur_word, hidden, cell)
             
             #cur_word = nn.softmax(hidden)
             

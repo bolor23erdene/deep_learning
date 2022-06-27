@@ -56,7 +56,7 @@ class Decoder(nn.Module):
         print("decoder input: ", input.shape)
         
         # embedded = 1 x batch x emb_dim 
-        embedded = self.embedding(input)
+        embedded = self.embedding(input).unsqueeze(0)
         
         print("decoder embedded: ", embedded.shape)
         

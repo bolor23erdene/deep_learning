@@ -17,15 +17,15 @@ class Encoder(nn.Module):
     def __init__(self, emb_dim, enc_hid_dim, eng_vocab_size, n_layers, bidirectional, pad_idx):
         super().__init__()
         self.embedder = nn.Embedding(eng_vocab_size, emb_dim, padding_idx=pad_idx)
-        self.rnn = nn.LSTM(emb_dim, enc_hid_dim, n_layers, bidirectional=bidirectional, batch_first=False)
+        self.rnn = nn.LSTM(emb_dim, enc_hid_dim, n_layers, bidirectional=bidirectional, batch_first=True)
         
     def forward(self, input, input_lens):
         # input = [seq_len x batch x eng_vocab_size]
         print(input.shape, len(input_lens))
-        embedded = self.embedder(input).permute(1, 0, 2)
+        embedded = self.embedder(input)#.permute(1, 0, 2)
         print('embedded: ', embedded.shape)
         
-        packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=False, enforce_sorted=False)  
+        packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=True)#, enforce_sorted=False)  
         
         # packed_embedded = [seq_len x batch x emb_dim]
         output, (hidden, cell) = self.rnn(packed_embedded)
@@ -50,7 +50,7 @@ class Decoder(nn.Module):
     
     def forward(self, input, hidden, cell):
         
-        # input = 1 x batch x 1
+        # input = 1 x batch 
         input = input.unsqueeze(0)
         
         print("decoder input: ", input.shape)
@@ -62,7 +62,7 @@ class Decoder(nn.Module):
         
         print("decoder input hidden: ", hidden.shape)
         
-        # hidden = 1 x batch x dec_hid_dim 
+        # hidden = 1 x batch x dec_hid_dim & (expects: 1 x 29 x 32) 
         out, (hidden, cell) = self.rnn(embedded, (hidden, cell))
         
         print("decoder input hidden: ", hidden.shape)
@@ -99,6 +99,7 @@ class Seq2Seq(nn.Module):
 
         outputs = torch.zeros((seq_len, batch_size, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
     
+        # de_batch = 
         input_decoder = de_batch[0, :]
     
         for t in range(1, seq_len):

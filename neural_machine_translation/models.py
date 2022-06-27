@@ -51,7 +51,7 @@ class Decoder(nn.Module):
         print("decoder input hidden: ", hidden.shape)
         
         
-        out, (hidden, cell) = self.rnn(input.unsqueeze(0), (hidden, cell))
+        out, (hidden, cell) = self.rnn(input, (hidden, cell))
         
         print("decoder input hidden: ", hidden.shape)
         

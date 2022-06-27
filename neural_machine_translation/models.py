@@ -25,7 +25,7 @@ class Encoder(nn.Module):
         embedded = self.embedder(input)#.permute(1, 0, 2)
         print('embedded: ', embedded.shape)
         
-        packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=True)#, enforce_sorted=False)  
+        packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=True, enforce_sorted=False)  
         
         # packed_embedded = [seq_len x batch x emb_dim]
         output, (hidden, cell) = self.rnn(packed_embedded)

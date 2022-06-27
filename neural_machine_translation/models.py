@@ -110,7 +110,7 @@ class Seq2Seq(nn.Module):
             
             output = output.permute(1, 0, 2)
 
-            outputs[:, t, :] = output
+            outputs[:, t, :] = output.squeeze(1)
             
             # predicted class or token from the predictions
             input_decoder = output.argmax(1)

@@ -41,15 +41,16 @@ class Encoder(nn.Module):
     
     
 class Decoder(nn.Module):
-    def __init__(self, de_vocab_dim, dec_hid_dim, enc_hid_dim, n_layers, bidirectional):
+    def __init__(self, de_vocab_dim, dec_hid_dim, emb_dim, n_layers, bidirectional):
         super().__init__()
-        self.rnn = nn.LSTM(enc_hid_dim, dec_hid_dim, n_layers, bidirectional=bidirectional, batch_first=True)
+        self.embedding = nn.Embedding(de_vocab_dim, emb_dim)
+        self.rnn = nn.LSTM(emb_dim, dec_hid_dim, n_layers, bidirectional=bidirectional, batch_first=True)
         self.fc = nn.Linear(dec_hid_dim, de_vocab_dim)
     
-    def forward(self, hidden, cell):
+    def forward(self, input, hidden, cell):
         
         print("decoder input hidden: ", hidden.shape)
-        
+        input = input.unsqueeze(0)
         
         out, (hidden, cell) = self.rnn(input, (hidden, cell))
         

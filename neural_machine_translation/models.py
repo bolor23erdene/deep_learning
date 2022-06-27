@@ -22,7 +22,7 @@ class Encoder(nn.Module):
     def forward(self, input, input_lens):
         # input = [seq_len x batch x eng_vocab_size]
         print(input.shape, len(input_lens))
-        embedded = self.embedder(input)
+        embedded = self.embedder(input).permute(1, 0, 2)
         print('embedded: ', embedded.shape)
         
         packed_embedded = pack_padded_sequence(embedded, input_lens.cpu(), batch_first=False, enforce_sorted=False)  

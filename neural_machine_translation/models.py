@@ -47,7 +47,7 @@ class Decoder(nn.Module):
         self.rnn = nn.LSTM(emb_dim, dec_hid_dim, n_layers, bidirectional=bidirectional, batch_first=True)
         self.fc = nn.Linear(dec_hid_dim, de_vocab_dim)
     
-    def forward(self, input, hidden, cell):
+    def forward(self, input, (hidden, cell)):
         
         print("decoder input hidden: ", hidden.shape)
         input = input.unsqueeze(0)

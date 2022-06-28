@@ -115,9 +115,9 @@ import time
 eng_vocab_size = len(en_vocab)
 de_vocab_size = len(de_vocab)
 
-encoder = Encoder(emb_dim=64, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, pad_idx=EN_PAD_IDX)
-decoder = Decoder(de_vocab_dim=de_vocab_size, dec_hid_dim=32, emb_dim=32, n_layers=1, bidirectional=False)
-seq2seq = Seq2Seq(encoder, decoder, device)
+encoder = Encoder(emb_dim=64, enc_hid_dim=32, eng_vocab_size=eng_vocab_size, n_layers=1, bidirectional=False, pad_idx=EN_PAD_IDX).to(device)
+decoder = Decoder(de_vocab_dim=de_vocab_size, dec_hid_dim=32, emb_dim=32, n_layers=1, bidirectional=False).to(device)
+seq2seq = Seq2Seq(encoder, decoder, device).to(device)
 
 LR = 5
 

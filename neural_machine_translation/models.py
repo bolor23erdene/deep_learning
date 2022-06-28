@@ -101,12 +101,12 @@ class Seq2Seq(nn.Module):
         
         hidden, cell = self.encoder(en_batch, en_text_lens)
 
-        outputs = torch.zeros((seq_len, batch_size, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
+        outputs = torch.zeros((batch_size, seq_len, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
     
         # de_batch = 
         input_decoder = de_batch[:, 0]
     
-        for t in range(1, seq_len-1):
+        for t in range(1, seq_len):
             
             output, (hidden, cell) = self.decoder(input_decoder, hidden, cell)
 

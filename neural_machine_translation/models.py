@@ -112,17 +112,20 @@ class Seq2Seq(nn.Module):
 
             print("output: ", output.shape)
             
-            output = output.permute(1, 0, 2)
+            #output = output.permute(1, 0, 2)
 
             # output = batch x 1 x |vocab| after permute & get rid of the dim=1
-            outputs[t] = output.squeeze(1)
+            outputs[t] = output.squeeze(0)
             
             print("t: ", t, outputs.shape)
-            
-            # predicted class or token from the predictions
             print(output.shape)
             print(output.argmax(0).shape, output.argmax(1).shape, output.argmax(2).shape)
-            input_decoder = output.argmax(2).squeeze(1)
+            
+            input_decoder = output.argmax(1).squeeze(1)
+            
+            # predicted class or token from the predictions
+
+            #input_decoder = output.argmax(2).squeeze(1)
             
         return outputs
             

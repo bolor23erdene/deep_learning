@@ -165,6 +165,7 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         total_acc += (predictions.argmax(1) == de_batch).sum().item()
         total_count += de_batch.size(0)
         
+        print(loss)
         print(total_acc/total_count)
 
         # elapsed = time.time() - start_time

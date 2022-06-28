@@ -143,8 +143,13 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         
         print("loss: ", predictions.shape, de_batch.shape)
         
-        predictions = predictions.view(-1, de_vocab_size)
-        de_batch = de_batch.view(-1)
+        # predictions = predictions.view(-1, de_vocab_size)
+        # de_batch = de_batch.view(-1)
+        
+        predictions = torch.reshape(predictions, (-1, de_vocab_size))
+        de_batch = torch.reshape(de_batch, (-1,))
+        
+        
         
         print("loss: ", predictions.shape, de_batch.shape)
         

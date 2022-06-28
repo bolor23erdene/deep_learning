@@ -136,37 +136,35 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
     
     
     optimizer.zero_grad()
+        
+    predictions = seq2seq(en_batch, en_text_lens, de_batch)
     
-    if idx == 0:
-        
-        predictions = seq2seq(en_batch, en_text_lens, de_batch)
-        
-        print("loss: ", predictions.shape, de_batch.shape)
-        
-        # predictions = predictions.view(-1, de_vocab_size)
-        # de_batch = de_batch.view(-1)
-        
-        predictions = torch.reshape(predictions, (-1, de_vocab_size))
-        de_batch = torch.reshape(de_batch, (-1,))
-        
-        
-        
-        print("loss: ", predictions.shape, de_batch.shape)
-        
-        loss = criterion(predictions, de_batch)
-        # loss = criterion(predictions.argmax(2).squeeze(2).permute(1,0), de_batch)
+    print("loss: ", predictions.shape, de_batch.shape)
     
+    # predictions = predictions.view(-1, de_vocab_size)
+    # de_batch = de_batch.view(-1)
+    
+    predictions = torch.reshape(predictions, (-1, de_vocab_size))
+    de_batch = torch.reshape(de_batch, (-1,))
+    
+    
+    
+    print("loss: ", predictions.shape, de_batch.shape)
+    
+    loss = criterion(predictions, de_batch)
+    # loss = criterion(predictions.argmax(2).squeeze(2).permute(1,0), de_batch)
 
-        # loss = criterion(hidden, label)
 
-        loss.backward()
-        optimizer.step()
+    # loss = criterion(hidden, label)
 
-        total_acc += (predictions.argmax(1) == de_batch).sum().item()
-        total_count += de_batch.size(0)
-        
-        print(loss)
-        print(total_acc/total_count)
+    loss.backward()
+    optimizer.step()
+
+    total_acc += (predictions.argmax(1) == de_batch).sum().item()
+    total_count += de_batch.size(0)
+    
+    print(loss)
+    print(total_acc/total_count)
 
         # elapsed = time.time() - start_time
         # print('| epoch {:3d} | {:5d}/{:5d} batches '

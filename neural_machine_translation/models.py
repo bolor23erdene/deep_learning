@@ -101,7 +101,7 @@ class Seq2Seq(nn.Module):
         
         hidden, cell = self.encoder(en_batch, en_text_lens)
 
-        outputs = torch.zeros((batch_size, seq_len, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
+        outputs = torch.zeros((seq_len, batch_size, de_vocab_dim)).to(self.device)# seq_len x batch x de_vocab_dim
     
         # de_batch = 
         input_decoder = de_batch[:, 0]
@@ -112,10 +112,10 @@ class Seq2Seq(nn.Module):
 
             print("output: ", output.shape)
             
-            output = output.permute(1, 0, 2)
+            #output = output.permute(1, 0, 2)
 
             # output = batch x 1 x |vocab|
-            outputs[:, t, :] = output.squeeze(1)
+            outputs[t, :, :] = output.squeeze(0)
             
             # predicted class or token from the predictions
             print(output.shape)

@@ -90,7 +90,7 @@ def generate_batch(data_batch):
   en_text_lens = torch.tensor(en_text_lens, dtype=torch.int64)
   de_text_lens = torch.tensor(de_text_lens, dtype=torch.int64)
   
-  return en_batch, de_batch, en_text_lens, de_text_lens
+  return en_batch.to(device), de_batch.to(device), en_text_lens.to(device), de_text_lens.to(device)
 
 train_iter = DataLoader(train_data, batch_size=BATCH_SIZE,
                         shuffle=True, collate_fn=generate_batch)
@@ -143,7 +143,7 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         
         print("loss: ", predictions.shape, de_batch.shape)
         
-        predictions = predictions.permute(1,0,2).view(-1, de_vocab_size)
+        predictions = predictions.view(-1, de_vocab_size)
         de_batch = de_batch.view(-1)
         
         print("loss: ", predictions.shape, de_batch.shape)

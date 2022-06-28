@@ -115,7 +115,7 @@ class Seq2Seq(nn.Module):
             output = output.permute(1, 0, 2)
 
             # output = batch x 1 x |vocab| after permute & get rid of the dim=1
-            outputs[:, t, :] = output.squeeze(1)
+            outputs[t] = output.squeeze(1)
             
             print("t: ", t, outputs.shape)
             

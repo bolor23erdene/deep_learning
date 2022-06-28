@@ -141,6 +141,8 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
         
         predictions = seq2seq(en_batch, en_text_lens, de_batch)
         
+        print("loss: ", predictions.shape, de_batch.shape)
+        
         loss = criterion(predictions.argmax(2).squeeze(2).permute(1,0), de_batch)
     
 

@@ -121,7 +121,7 @@ class Seq2Seq(nn.Module):
             print(output.shape)
             print(output.argmax(0).shape, output.argmax(1).shape, output.argmax(2).shape)
             
-            input_decoder = output.argmax(1).squeeze(1)
+            input_decoder = output.argmax(2).squeeze(0)
             
             # predicted class or token from the predictions
 

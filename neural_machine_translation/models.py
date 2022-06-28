@@ -106,7 +106,7 @@ class Seq2Seq(nn.Module):
         # de_batch = 
         input_decoder = de_batch[:, 0]
     
-        for t in range(1, seq_len):
+        for t in range(1, seq_len-1):
             
             output, (hidden, cell) = self.decoder(input_decoder, hidden, cell)
 
@@ -114,6 +114,7 @@ class Seq2Seq(nn.Module):
             
             output = output.permute(1, 0, 2)
 
+            # output = batch x 1 x |vocab|
             outputs[:, t, :] = output.squeeze(1)
             
             # predicted class or token from the predictions
@@ -125,28 +126,6 @@ class Seq2Seq(nn.Module):
             
             
             
-# encoder = Encoder()
-# decoder = Decoder()
-# seq2seq = Seq2Seq(encoder, decoder, de_vocab_size, de_output)
-            
-# def train(dataloader):
-    
-    
-#     for idx, (label, text, text_lengths) in enumerate(dataloader):
-        
-#         outputs = seq2seq(text)
-        
-#         loss = criterion(outputs, label)
-        
-#         loss.backward()
-        
-#         optimizer.step()
-        
-#         total_acc += 
-#         total_count += label.size(0)
-        
-#         print("acc: ", total_acc/total_count)
-        
         
         
             

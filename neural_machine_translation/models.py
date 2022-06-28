@@ -127,7 +127,7 @@ class Seq2Seq(nn.Module):
 
             #input_decoder = output.argmax(2).squeeze(1)
             
-        return outputs
+        return outputs.permute(1,0,2)
             
             
             

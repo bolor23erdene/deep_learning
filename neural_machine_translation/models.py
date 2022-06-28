@@ -95,8 +95,8 @@ class Seq2Seq(nn.Module):
         
     def forward(self, en_batch, en_text_lens, de_batch):
         # input_in_eng = seq_len x batch_size 
-        seq_len = en_batch.size(1)
-        batch_size = en_batch.size(0)
+        seq_len = de_batch.size(1)
+        batch_size = de_batch.size(0)
         de_vocab_dim = self.decoder.de_vocab_dim
         
         hidden, cell = self.encoder(en_batch, en_text_lens)

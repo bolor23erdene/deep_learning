@@ -16,7 +16,7 @@ from torchtext.utils import download_from_url, extract_archive
 import io
 import spacy
 
-!python --version
+#!python --version
 torchtext.__version__, torch.__version__, spacy.__version__
 
 ### download the training dataset
@@ -32,7 +32,7 @@ train_filepaths = [extract_archive(download_from_url(url_base + url))[0] for url
 val_filepaths = [extract_archive(download_from_url(url_base + url))[0] for url in val_urls]
 test_filepaths = [extract_archive(download_from_url(url_base + url))[0] for url in test_urls]
 
-!python -m spacy download de_core_news_sm
+#!python -m spacy download de_core_news_sm
 
 import spacy
 spacy.load("en_core_web_sm")
@@ -333,7 +333,7 @@ for idx, (en_batch, de_batch, en_text_lens, de_text_lens) in enumerate(train_ite
     if idx == 20:
         break
 
-!ls
+
 
 """# evaluation"""
 

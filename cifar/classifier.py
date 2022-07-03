@@ -17,7 +17,7 @@ matplotlib.use('Agg')
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 nb_epochs = 10
-batch_size = 128
+batch_size = 1024
 
 # defining a function called transform
 transform = transforms.Compose(

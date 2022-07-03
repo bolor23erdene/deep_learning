@@ -6,11 +6,11 @@ import torch.optim as optim
 import pandas as pd 
 import torchvision.transforms as transforms
 
-nb_epochs = 5
+nb_epochs = 1
 
-batch_size = 2000
+batch_size = 128
 
-batch_size = 2000
+batch_size = 128
 
 trainloader = torch.utils.data.DataLoader(
     torchvision.datasets.MNIST('./data', train=True, download=True,
@@ -34,14 +34,14 @@ testloader = torch.utils.data.DataLoader(
 net = DoubleCnnThreeMlp()
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimizer = optim.SGD(net.parameters(), lr=0.01, momentum=0.9)
 loss = []
 
 for r in range(nb_epochs):
 
     total_loss = 0
     total_cnt = 0
-
+    print("Epoch: ", str(r))
     for i, batch in enumerate(trainloader, 0):
 
         images, labels = batch
@@ -125,7 +125,7 @@ with torch.no_grad():
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
 
-print('Accuracy of the network on the 10000 test images: %d %%' % (
+print('Accuracy of the network on the test images: %d %%' % (
     100 * correct / total))
 
 
